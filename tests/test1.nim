@@ -4,9 +4,17 @@
 # the letter 't').
 #
 # To run these tests, simply execute `nimble test`.
-
+#
+import arraymancer
 import unittest
+import fftw3
 
-import nimfftw3
-test "can add":
-  check add(5, 5) == 10
+
+test "fftw_plan_dft_r2c":
+  var dims: seq[int] = @[3, 2, 2]
+  var input: Tensor[float64] = randomTensor(dims, 100).astype(float64)
+  apply_inline(input):
+    x / 100
+  var output: Tensor[Complex64] = newTensor[Complex64](dims)
+  let fft = fftw_plan_dft_r2c(input, output)
+  fftw_execute(fft)
