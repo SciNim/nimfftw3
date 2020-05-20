@@ -351,3 +351,13 @@ proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64],
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
+
+proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
+  fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)
+
+proc fftw_execute_dft_r2c*(p: fftw_plan, input: Tensor[float64], output: Tensor[fftw_complex])=
+  fftw_execute_dft_r2c(p, cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr)
+
+proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: Tensor[float64])=
+  fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
+
