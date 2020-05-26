@@ -293,64 +293,82 @@ var fftw_codelet_optim* {.importc: "fftw_codelet_optim", dynlib: LibraryName.}: 
 import arraymancer
 import sequtils
 
-proc fftw_plan_dft*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint): fftw_plan=
+proc fftw_plan_dft*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, output.get_data_ptr,sign, flags)
 
-proc fftw_plan_dft_1d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_1d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_1d(shape[0], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
 
-proc fftw_plan_dft_2d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_2d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_2d(shape[0], shape[1], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
-proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
-proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
-proc fftw_plan_dft_r2c_1d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_r2c_1d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
-proc fftw_plan_dft_r2c_2d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_r2c_2d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
-proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
-proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
-proc fftw_plan_dft_c2r_1d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_c2r_1d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_1d(shape[0], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
-proc fftw_plan_dft_c2r_2d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_c2r_2d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_2d(shape[0], shape[1], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
-proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_ESTIMATE): fftw_plan=
+proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
+proc fftw_plan_r2r_1d*(input: Tensor[float64], output: Tensor[float64], kind: fftw_r2r_kind, flags: cuint = FFTW_MEASURE): fftw_plan=
+  assert(input.rank == 1)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kind, flags)
+
+proc fftw_plan_r2r_2d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  assert(input.rank == 2)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], flags)
+
+proc fftw_plan_r2r_3d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  assert(input.rank == 3)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], kinds[2], flags)
+
+proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0].unsafeaddr, flags)
 
 proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
   fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)

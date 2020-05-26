@@ -1,41 +1,17 @@
 import arraymancer
 import complex
 
-proc compare[T](A,B: Tensor[T]): bool=
-  if A.shape != B.shape:
+const MIN_FLOAT_COMPARAISON = 1e-8
+
+proc compare*[T](a: Tensor[T], b:Tensor[T]): bool=
+  if a.shape != b.shape:
     echo "Error wrong shape"
     result = false
   else:
-    let diff = abs(A -. B)
+    var diff  : Tensor[float64] = abs(a -. b)
+    let MA = max(abs(a))
+    let MB = max(abs(b))
+    let MIN_FLOAT_SCALED_COMPARAISON = MIN_FLOAT_COMPARAISON*(MA+MB)/2
     echo max(diff)
-    result = max(diff) < 1e-9
-
-proc compare(A,B: Tensor[Complex64]): bool=
-  if A.shape != B.shape:
-    echo "Error wrong shape"
-    result = false
-  else:
-    var diff = 0.0
-    for a, b in zip(A,B):
-      var e = abs(a - b)
-      if e >= diff:
-        diff = e
-    echo diff
-    result = diff < 1e-9
-
-proc compare(A: Tensor[Complex64],B: Tensor[float64]): bool=
-  echo A.shape
-  echo B.shape
-  if A.shape != B.shape:
-    echo "Error wrong shape"
-    result = false
-  else:
-    var diff = 0.0
-    for a, b in zip(A,B):
-      var e = abs(a.re - b)
-      if e >= diff:
-        diff = e
-    echo diff
-    result = diff < 1e-9
-
+    result = max(diff) < MIN_FLOAT_SCALED_COMPARAISON
 
