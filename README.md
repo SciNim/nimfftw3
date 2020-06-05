@@ -9,4 +9,4 @@ This is still a WIP. The goal is to have a high level API compatible with arraym
 TODO:
   * add more documentation, unit test as examples.
 
-These bindings are released under a MIT license. FFTW3 is released under a GPLv2 or above license.
+These bindings are released under a LGPL license. FFTW3 is released under a GPLv2 or above license.
