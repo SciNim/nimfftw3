@@ -289,7 +289,8 @@ var fftw_cc* {.importc: "fftw_cc", dynlib: LibraryName.}: ptr char
 var fftw_codelet_optim* {.importc: "fftw_codelet_optim", dynlib: LibraryName.}: ptr char
 
 ################################################################################
-
+## Arraymancer non-official API for ease of use
+################################################################################
 import arraymancer
 import sequtils
 
@@ -302,7 +303,6 @@ proc fftw_plan_dft_1d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex]
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_1d(shape[0], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
-
 proc fftw_plan_dft_2d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
@@ -312,6 +312,11 @@ proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex]
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
+
+
+##################################################################################
+## R2C Plan
+##################################################################################
 
 proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
@@ -332,6 +337,10 @@ proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex],
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
+##################################################################################
+## C2R Plan
+##################################################################################
+
 proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
@@ -350,6 +359,10 @@ proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64],
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
+
+##################################################################################
+## R2R Plan
+##################################################################################
 
 proc fftw_plan_r2r_1d*(input: Tensor[float64], output: Tensor[float64], kind: fftw_r2r_kind, flags: cuint = FFTW_MEASURE): fftw_plan=
   assert(input.rank == 1)
@@ -370,6 +383,11 @@ proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0].unsafeaddr, flags)
 
+
+##################################################################################
+## Execute Plan with new Tensor
+##################################################################################
+
 proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
   fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)
 
@@ -378,4 +396,57 @@ proc fftw_execute_dft_r2c*(p: fftw_plan, input: Tensor[float64], output: Tensor[
 
 proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: Tensor[float64])=
   fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
+
+
+##################################################################################
+## Utility procedures
+##################################################################################
+
+## This is a copy from p_accessors that is private
+## It will be removed when there is a way to access those functions in Arraymancer
+proc getIndex*[T](t: Tensor[T], idx: varargs[int]): int {.noSideEffect,inline.} =
+  result = t.offset
+  for i in 0..<idx.len:
+    result += t.strides[i]*idx[i]
+
+proc atIndex*[T](t: Tensor[T], idx: varargs[int]): T {.noSideEffect,inline.} =
+  ## Get the value at input coordinates
+  ## This used to be `[]` before slicing was implemented
+  result = t.data[t.getIndex(idx)]
+
+proc atIndex*[T](t: var Tensor[T], idx: varargs[int]): var T {.noSideEffect,inline.} =
+  ## Get the value at input coordinates
+  ## This allows inplace operators t[1,2] += 10 syntax
+  result = t.data[t.getIndex(idx)]
+
+proc atIndexMut*[T](t: var Tensor[T], idx: varargs[int], val: T) {.noSideEffect,inline.} =
+  ## Set the value at input coordinates
+  ## This used to be `[]=` before slicing was implemented
+  t.data[t.getIndex(idx)] = val
+
+#######################
+## FFTSHIFt & CIRCSHIFT
+#######################
+
+proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
+  assert(t.rank == shift.len)
+  let shape = t.shape.toSeq
+  result = newTensor[T](t.shape.toSeq)
+  for coord, values in t:
+    var newcoord : seq[int] = newSeq[int](t.rank)
+    for i in 0..<t.rank:
+      newcoord[i] = (coord[i]+shift[i]) mod shape[i]
+    result.atIndexMut(newcoord, values)
+
+proc fftshift*[T](t: Tensor[T]): Tensor[T]=
+  var xshift = t.shape[0] div 2
+  var yshift = t.shape[1] div 2
+  var zshift = t.shape[2] div 2
+  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+
+proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
+  var xshift = (t.shape[0]+1) div 2
+  var yshift = (t.shape[1]+1) div 2
+  var zshift = (t.shape[2]+1) div 2
+  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 
