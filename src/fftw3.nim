@@ -402,31 +402,7 @@ proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: 
 ## Utility procedures
 ##################################################################################
 
-## This is a copy from p_accessors that is private
-## It will be removed when there is a way to access those functions in Arraymancer
-proc getIndex*[T](t: Tensor[T], idx: varargs[int]): int {.noSideEffect,inline.} =
-  result = t.offset
-  for i in 0..<idx.len:
-    result += t.strides[i]*idx[i]
-
-proc atIndex*[T](t: Tensor[T], idx: varargs[int]): T {.noSideEffect,inline.} =
-  ## Get the value at input coordinates
-  ## This used to be `[]` before slicing was implemented
-  result = t.data[t.getIndex(idx)]
-
-proc atIndex*[T](t: var Tensor[T], idx: varargs[int]): var T {.noSideEffect,inline.} =
-  ## Get the value at input coordinates
-  ## This allows inplace operators t[1,2] += 10 syntax
-  result = t.data[t.getIndex(idx)]
-
-proc atIndexMut*[T](t: var Tensor[T], idx: varargs[int], val: T) {.noSideEffect,inline.} =
-  ## Set the value at input coordinates
-  ## This used to be `[]=` before slicing was implemented
-  t.data[t.getIndex(idx)] = val
-
-#######################
-## FFTSHIFt & CIRCSHIFT
-#######################
+import arraymancer/../tensor/private/p_accessors
 
 proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
   assert(t.rank == shift.len)
