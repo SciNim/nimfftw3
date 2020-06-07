@@ -1,6 +1,3 @@
-# Bindings to the FFTW3 library generated automatically by Maurizio
-# Tomasi using c2nim
-
 when defined(windows):
     const LibraryName = "fftw3.dll"
 elif defined(macosx):
@@ -288,9 +285,9 @@ var fftw_cc* {.importc: "fftw_cc", dynlib: LibraryName.}: ptr char
 
 var fftw_codelet_optim* {.importc: "fftw_codelet_optim", dynlib: LibraryName.}: ptr char
 
-################################################################################
-## Arraymancer non-official API for ease of use
-################################################################################
+
+# Arraymancer non-official API for ease of use
+
 import arraymancer
 import sequtils
 
@@ -319,9 +316,7 @@ proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex]
   result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
 
-##################################################################################
-## R2C Plan
-##################################################################################
+# R2C Plan
 
 proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
   ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
@@ -347,9 +342,7 @@ proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex],
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
-##################################################################################
-## C2R Plan
-##################################################################################
+# C2R Plan
 
 proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
   ## Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
@@ -374,9 +367,7 @@ proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64],
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
-##################################################################################
-## R2R Plan
-##################################################################################
+# R2R Plan
 
 proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
   ## Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
@@ -401,9 +392,7 @@ proc fftw_plan_r2r_3d*(input: Tensor[float64], output: Tensor[float64], kinds: s
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_r2r_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], kinds[2], flags)
 
-##################################################################################
-## Execute Plan with new Tensor
-##################################################################################
+# Execute Plan with new Tensor
 
 proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
   ## Execute a plan on new Tensor
@@ -417,10 +406,7 @@ proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: 
   ## Execute a complex-to-real plan on new Tensor
   fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
 
-
-##################################################################################
-## Utility procedures
-##################################################################################
+# Utility procedures
 
 import arraymancer/../tensor/private/p_accessors
 
