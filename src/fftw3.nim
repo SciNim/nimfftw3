@@ -295,20 +295,25 @@ import arraymancer
 import sequtils
 
 proc fftw_plan_dft*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  ## Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, output.get_data_ptr,sign, flags)
 
 proc fftw_plan_dft_1d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_1d(shape[0], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
 proc fftw_plan_dft_2d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_2d(shape[0], shape[1], input.get_data_ptr, output.get_data_ptr,sign, flags)
 
 proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
@@ -319,20 +324,25 @@ proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex]
 ##################################################################################
 
 proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  ## Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
 proc fftw_plan_dft_r2c_1d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
 proc fftw_plan_dft_r2c_2d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
 
 proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_r2c_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
@@ -342,20 +352,24 @@ proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex],
 ##################################################################################
 
 proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
 proc fftw_plan_dft_c2r_1d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_1d(shape[0], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
 proc fftw_plan_dft_c2r_2d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_2d(shape[0], shape[1], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
 
 proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
@@ -364,37 +378,43 @@ proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64],
 ## R2R Plan
 ##################################################################################
 
+proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0].unsafeaddr, flags)
+
 proc fftw_plan_r2r_1d*(input: Tensor[float64], output: Tensor[float64], kind: fftw_r2r_kind, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 1)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_r2r_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kind, flags)
 
 proc fftw_plan_r2r_2d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 2)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_r2r_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], flags)
 
 proc fftw_plan_r2r_3d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_r2r_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], kinds[2], flags)
-
-proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0].unsafeaddr, flags)
-
 
 ##################################################################################
 ## Execute Plan with new Tensor
 ##################################################################################
 
 proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
+  ## Execute a plan on new Tensor
   fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)
 
 proc fftw_execute_dft_r2c*(p: fftw_plan, input: Tensor[float64], output: Tensor[fftw_complex])=
+  ## Execute a real-to-complex plan on new Tensor
   fftw_execute_dft_r2c(p, cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr)
 
 proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: Tensor[float64])=
+  ## Execute a complex-to-real plan on new Tensor
   fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
 
 
@@ -405,6 +425,7 @@ proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: 
 import arraymancer/../tensor/private/p_accessors
 
 proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
+  ## Circshift
   assert(t.rank == shift.len)
   let shape = t.shape.toSeq
   result = newTensor[T](t.shape.toSeq)
@@ -415,14 +436,16 @@ proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
     result.atIndexMut(newcoord, values)
 
 proc fftshift*[T](t: Tensor[T]): Tensor[T]=
-  var xshift = t.shape[0] div 2
-  var yshift = t.shape[1] div 2
-  var zshift = t.shape[2] div 2
+  ## Calculate fftshift using circshift
+  let xshift = t.shape[0] div 2
+  let yshift = t.shape[1] div 2
+  let zshift = t.shape[2] div 2
   result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 
 proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
-  var xshift = (t.shape[0]+1) div 2
-  var yshift = (t.shape[1]+1) div 2
-  var zshift = (t.shape[2]+1) div 2
+  ## Calculate inverse fftshift using circshift
+  let xshift = (t.shape[0]+1) div 2
+  let yshift = (t.shape[1]+1) div 2
+  let zshift = (t.shape[2]+1) div 2
   result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 

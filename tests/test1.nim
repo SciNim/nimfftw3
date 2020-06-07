@@ -1,7 +1,4 @@
 import unittest
-import macros
-import sequtils
-import os
 import sugar
 
 import fftw3
@@ -12,9 +9,6 @@ import arraymancer
 import random
 import times
 import system
-
-proc mirrorTime[T](data: Tensor[T]): Tensor[T]=
-  result = concat(data[_.._, _.._, ^1..1|-1], data, axis=2)
 
 proc main()=
   let dims = @[4, 3, 2*7-1]
