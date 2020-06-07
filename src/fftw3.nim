@@ -1,3 +1,55 @@
+### Introduction
+
+## Nim binding for the FFTW3 library
+##
+## FFTW is one the best library to compute Fourier transforms of various kinds with high performance.
+##
+## Make sure FFTW's documentation : http://www.fftw.org/fftw3_doc/
+##
+## The C-bindings can be used identically to the C-API
+##
+## In order to simplify usage an Arraymancer high level API is added on top of the low-level API.
+##
+
+### Examples
+
+##  C-Binding low-level example
+
+##  .. code-block:: nim
+##      const N = 3
+##      var input : array[1..N, cdouble] = [0.0, 2.0, 6.0]
+##      var output : array[1..N, cdouble]
+##
+##      let plan = fftw_plan_r2r_1d(N, addr(input[low(input)]), addr(output[low(output)]),
+##                                  FFTW_REDFT00, FFTW_ESTIMATE)
+##
+##      input = [0.0, 2.0, 6.0]
+##      fftw_execute(plan)
+##
+##      let expectedResult : array[1..N, cdouble] = [10.0, -6.0, 2.0]
+##      for i in low(output)..high(output):
+##          assert abs(output[i] - expectedResult[i]) < 1.0e-14
+
+
+##  Arraymancer API example
+
+## .. code-block:: nim
+##   var input  : Tensor[Complex64] = # Insert data in your input Tensor...
+##   # Allocate output Tensor
+##   var output = newTensor[Complex64](input.shape.toSeq)
+##   # Create a plan
+##   var plan : fftw_plan = fftw_plan_dft(input, output, FFTW_FORWARD, FFTW_ESTIMATE)
+##   # Execute plan in-place
+##   fftw_execute(plan)
+
+# Arraymancer non-official API for ease of use
+
+import arraymancer
+import sequtils
+import complex
+import arraymancer/../tensor/private/p_accessors
+
+
 when defined(windows):
     const LibraryName = "fftw3.dll"
 elif defined(macosx):
@@ -26,7 +78,6 @@ const
   FFTW_FORWARD*  = -1
   FFTW_BACKWARD* = 1
 
-import complex
 
 type
   fftw_iodim* {. pure .} = object
@@ -43,25 +94,260 @@ type
 
   fftw_write_char_func* = proc (c: char; a3: pointer) {.cdecl.}
   fftw_read_char_func* = proc (a2: pointer): cint {.cdecl.}
-  # No need to define fftw_complex as an array
-  #fftw_complex* = array[2, cdouble]
   fftw_complex* = Complex64
   fftw_plan* = pointer
 
+# Utility procedures
+
+proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
+  ## Circshift
+  assert(t.rank == shift.len)
+  let shape = t.shape.toSeq
+  result = newTensor[T](t.shape.toSeq)
+  for coord, values in t:
+    var newcoord : seq[int] = newSeq[int](t.rank)
+    for i in 0..<t.rank:
+      newcoord[i] = (coord[i]+shift[i]) mod shape[i]
+    result.atIndexMut(newcoord, values)
+
+proc fftshift*[T](t: Tensor[T]): Tensor[T]=
+  ## Calculate fftshift using circshift
+  let xshift = t.shape[0] div 2
+  let yshift = t.shape[1] div 2
+  let zshift = t.shape[2] div 2
+  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+
+proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
+  ## Calculate inverse fftshift using circshift
+  let xshift = (t.shape[0]+1) div 2
+  let yshift = (t.shape[1]+1) div 2
+  let zshift = (t.shape[2]+1) div 2
+  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+
+
 proc fftw_execute*(p: fftw_plan) {.cdecl, importc: "fftw_execute",
                                    dynlib: LibraryName.}
+
+proc fftw_execute_dft*(p: fftw_plan; `in`: ptr fftw_complex;
+                       `out`: ptr fftw_complex) {.cdecl,
+    importc: "fftw_execute_dft", dynlib: LibraryName.}
+
+proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
+  ## Execute a plan on new Tensor
+  fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)
+
+proc fftw_execute_r2r*(p: fftw_plan; `in`: ptr cdouble; `out`: ptr cdouble) {.
+    cdecl, importc: "fftw_execute_r2r", dynlib: LibraryName.}
+
+
+proc fftw_execute_dft_r2c*(p: fftw_plan; `in`: ptr cdouble;
+                           `out`: ptr fftw_complex) {.cdecl,
+    importc: "fftw_execute_dft_r2c", dynlib: LibraryName.}
+
+proc fftw_execute_dft_r2c*(p: fftw_plan, input: Tensor[float64], output: Tensor[fftw_complex])=
+  ## Execute a real-to-complex plan on new Tensor
+  fftw_execute_dft_r2c(p, cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr)
+
+
+proc fftw_execute_dft_c2r*(p: fftw_plan; `in`: ptr fftw_complex;
+                           `out`: ptr cdouble) {.cdecl,
+    importc: "fftw_execute_dft_c2r", dynlib: LibraryName.}
+
+proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: Tensor[float64])=
+  ## Execute a complex-to-real plan on new Tensor
+  fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
+
+
+
+proc fftw_execute_split_dft*(p: fftw_plan; ri: ptr cdouble; ii: ptr cdouble;
+                             ro: ptr cdouble; io: ptr cdouble) {.cdecl,
+    importc: "fftw_execute_split_dft", dynlib: LibraryName.}
+
+proc fftw_execute_split_dft_r2c*(p: fftw_plan; `in`: ptr cdouble;
+                                 ro: ptr cdouble; io: ptr cdouble) {.cdecl,
+    importc: "fftw_execute_split_dft_r2c", dynlib: LibraryName.}
+
+proc fftw_execute_split_dft_c2r*(p: fftw_plan; ri: ptr cdouble; ii: ptr cdouble;
+                                 `out`: ptr cdouble) {.cdecl,
+    importc: "fftw_execute_split_dft_c2r", dynlib: LibraryName.}
+
+
+
+
 proc fftw_plan_dft*(rank: cint; n: ptr cint; `in`: ptr fftw_complex;
                     `out`: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_dft", dynlib: LibraryName.}
+
+proc fftw_plan_dft*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  ## Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, output.get_data_ptr,sign, flags)
+
+
 proc fftw_plan_dft_1d*(n: cint; `in`: ptr fftw_complex; `out`: ptr fftw_complex;
                        sign: cint; flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_dft_1d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_1d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 1)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_1d(shape[0], input.get_data_ptr, output.get_data_ptr,sign, flags)
+
+
 proc fftw_plan_dft_2d*(n0: cint; n1: cint; `in`: ptr fftw_complex;
                        `out`: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_dft_2d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_2d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 2)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_2d(shape[0], shape[1], input.get_data_ptr, output.get_data_ptr,sign, flags)
+
 proc fftw_plan_dft_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr fftw_complex;
                        `out`: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_dft_3d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 3)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
+
+
+
+proc fftw_plan_dft_r2c*(rank: cint; n: ptr cint; `in`: ptr cdouble;
+                        `out`: ptr fftw_complex; flags: cuint): fftw_plan {.
+    cdecl, importc: "fftw_plan_dft_r2c", dynlib: LibraryName.}
+
+proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  ## Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
+
+proc fftw_plan_dft_r2c_1d*(n: cint; `in`: ptr cdouble; `out`: ptr fftw_complex;
+                           flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_dft_r2c_1d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_r2c_1d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 1)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_r2c_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
+
+
+proc fftw_plan_dft_r2c_2d*(n0: cint; n1: cint; `in`: ptr cdouble;
+                           `out`: ptr fftw_complex; flags: cuint): fftw_plan {.
+    cdecl, importc: "fftw_plan_dft_r2c_2d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_r2c_2d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 2)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_r2c_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
+
+
+proc fftw_plan_dft_r2c_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr cdouble;
+                           `out`: ptr fftw_complex; flags: cuint): fftw_plan {.
+    cdecl, importc: "fftw_plan_dft_r2c_3d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 3)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_r2c_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
+
+
+proc fftw_plan_dft_c2r*(rank: cint; n: ptr cint; `in`: ptr fftw_complex;
+                        `out`: ptr cdouble; flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_dft_c2r", dynlib: LibraryName.}
+
+proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
+
+
+proc fftw_plan_dft_c2r_1d*(n: cint; `in`: ptr fftw_complex; `out`: ptr cdouble;
+                           flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_dft_c2r_1d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_c2r_1d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 1)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_c2r_1d(shape[0], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
+
+
+proc fftw_plan_dft_c2r_2d*(n0: cint; n1: cint; `in`: ptr fftw_complex;
+                           `out`: ptr cdouble; flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_dft_c2r_2d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_c2r_2d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 2)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_c2r_2d(shape[0], shape[1], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
+
+proc fftw_plan_dft_c2r_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr fftw_complex;
+                           `out`: ptr cdouble; flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_dft_c2r_3d", dynlib: LibraryName.}
+
+proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 3)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
+
+
+
+proc fftw_plan_r2r*(rank: cint; n: ptr cint; `in`: ptr cdouble;
+                    `out`: ptr cdouble; kind: ptr fftw_r2r_kind; flags: cuint): fftw_plan {.
+    cdecl, importc: "fftw_plan_r2r", dynlib: LibraryName.}
+
+proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0].unsafeaddr, flags)
+
+
+proc fftw_plan_r2r_1d*(n: cint; `in`: ptr cdouble; `out`: ptr cdouble;
+                       kind: fftw_r2r_kind; flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_r2r_1d", dynlib: LibraryName.}
+
+proc fftw_plan_r2r_1d*(input: Tensor[float64], output: Tensor[float64], kind: fftw_r2r_kind, flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 1D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 1)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kind, flags)
+
+
+proc fftw_plan_r2r_2d*(n0: cint; n1: cint; `in`: ptr cdouble;
+                       `out`: ptr cdouble; kind0: fftw_r2r_kind;
+                       kind1: fftw_r2r_kind; flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_r2r_2d", dynlib: LibraryName.}
+
+proc fftw_plan_r2r_2d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 2D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 2)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], flags)
+
+
+proc fftw_plan_r2r_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr cdouble;
+                       `out`: ptr cdouble; kind0: fftw_r2r_kind;
+                       kind1: fftw_r2r_kind; kind2: fftw_r2r_kind; flags: cuint): fftw_plan {.
+    cdecl, importc: "fftw_plan_r2r_3d", dynlib: LibraryName.}
+
+proc fftw_plan_r2r_3d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
+  ## 3D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  assert(input.rank == 3)
+  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
+  result = fftw_plan_r2r_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], kinds[2], flags)
+
 
 proc fftw_plan_many_dft*(rank: cint; n: ptr cint; howmany: cint;
                          `in`: ptr fftw_complex; inembed: ptr cint;
@@ -69,6 +355,32 @@ proc fftw_plan_many_dft*(rank: cint; n: ptr cint; howmany: cint;
                          onembed: ptr cint; ostride: cint; odist: cint;
                          sign: cint; flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_many_dft", dynlib: LibraryName.}
+
+
+
+proc fftw_plan_many_dft_c2r*(rank: cint; n: ptr cint; howmany: cint;
+                             `in`: ptr fftw_complex; inembed: ptr cint;
+                             istride: cint; idist: cint; `out`: ptr cdouble;
+                             onembed: ptr cint; ostride: cint; odist: cint;
+                             flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_many_dft_c2r", dynlib: LibraryName.}
+
+proc fftw_plan_many_dft_r2c*(rank: cint; n: ptr cint; howmany: cint;
+                             `in`: ptr cdouble; inembed: ptr cint;
+                             istride: cint; idist: cint;
+                             `out`: ptr fftw_complex; onembed: ptr cint;
+                             ostride: cint; odist: cint; flags: cuint): fftw_plan {.
+    cdecl, importc: "fftw_plan_many_dft_r2c", dynlib: LibraryName.}
+
+proc fftw_plan_many_r2r*(rank: cint; n: ptr cint; howmany: cint;
+                         `in`: ptr cdouble; inembed: ptr cint; istride: cint;
+                         idist: cint; `out`: ptr cdouble; onembed: ptr cint;
+                         ostride: cint; odist: cint; kind: ptr fftw_r2r_kind;
+                         flags: cuint): fftw_plan {.cdecl,
+    importc: "fftw_plan_many_r2r", dynlib: LibraryName.}
+
+
+
 
 proc fftw_plan_guru_dft*(rank: cint; dims: ptr fftw_iodim; howmany_rank: cint;
                          howmany_dims: ptr fftw_iodim; `in`: ptr fftw_complex;
@@ -90,53 +402,6 @@ proc fftw_plan_guru64_split_dft*(rank: cint; dims: ptr fftw_iodim64;
                                  ri: ptr cdouble; ii: ptr cdouble;
                                  ro: ptr cdouble; io: ptr cdouble; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_guru64_split_dft", dynlib: LibraryName.}
-
-proc fftw_execute_dft*(p: fftw_plan; `in`: ptr fftw_complex;
-                       `out`: ptr fftw_complex) {.cdecl,
-    importc: "fftw_execute_dft", dynlib: LibraryName.}
-proc fftw_execute_split_dft*(p: fftw_plan; ri: ptr cdouble; ii: ptr cdouble;
-                             ro: ptr cdouble; io: ptr cdouble) {.cdecl,
-    importc: "fftw_execute_split_dft", dynlib: LibraryName.}
-
-proc fftw_plan_many_dft_r2c*(rank: cint; n: ptr cint; howmany: cint;
-                             `in`: ptr cdouble; inembed: ptr cint;
-                             istride: cint; idist: cint;
-                             `out`: ptr fftw_complex; onembed: ptr cint;
-                             ostride: cint; odist: cint; flags: cuint): fftw_plan {.
-    cdecl, importc: "fftw_plan_many_dft_r2c", dynlib: LibraryName.}
-
-proc fftw_plan_dft_r2c*(rank: cint; n: ptr cint; `in`: ptr cdouble;
-                        `out`: ptr fftw_complex; flags: cuint): fftw_plan {.
-    cdecl, importc: "fftw_plan_dft_r2c", dynlib: LibraryName.}
-proc fftw_plan_dft_r2c_1d*(n: cint; `in`: ptr cdouble; `out`: ptr fftw_complex;
-                           flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_dft_r2c_1d", dynlib: LibraryName.}
-proc fftw_plan_dft_r2c_2d*(n0: cint; n1: cint; `in`: ptr cdouble;
-                           `out`: ptr fftw_complex; flags: cuint): fftw_plan {.
-    cdecl, importc: "fftw_plan_dft_r2c_2d", dynlib: LibraryName.}
-proc fftw_plan_dft_r2c_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr cdouble;
-                           `out`: ptr fftw_complex; flags: cuint): fftw_plan {.
-    cdecl, importc: "fftw_plan_dft_r2c_3d", dynlib: LibraryName.}
-
-proc fftw_plan_many_dft_c2r*(rank: cint; n: ptr cint; howmany: cint;
-                             `in`: ptr fftw_complex; inembed: ptr cint;
-                             istride: cint; idist: cint; `out`: ptr cdouble;
-                             onembed: ptr cint; ostride: cint; odist: cint;
-                             flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_many_dft_c2r", dynlib: LibraryName.}
-
-proc fftw_plan_dft_c2r*(rank: cint; n: ptr cint; `in`: ptr fftw_complex;
-                        `out`: ptr cdouble; flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_dft_c2r", dynlib: LibraryName.}
-proc fftw_plan_dft_c2r_1d*(n: cint; `in`: ptr fftw_complex; `out`: ptr cdouble;
-                           flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_dft_c2r_1d", dynlib: LibraryName.}
-proc fftw_plan_dft_c2r_2d*(n0: cint; n1: cint; `in`: ptr fftw_complex;
-                           `out`: ptr cdouble; flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_dft_c2r_2d", dynlib: LibraryName.}
-proc fftw_plan_dft_c2r_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr fftw_complex;
-                           `out`: ptr cdouble; flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_dft_c2r_3d", dynlib: LibraryName.}
 
 proc fftw_plan_guru_dft_r2c*(rank: cint; dims: ptr fftw_iodim;
                              howmany_rank: cint; howmany_dims: ptr fftw_iodim;
@@ -185,41 +450,6 @@ proc fftw_plan_guru64_split_dft_c2r*(rank: cint; dims: ptr fftw_iodim64;
                                      `out`: ptr cdouble; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_guru64_split_dft_c2r", dynlib: LibraryName.}
 
-proc fftw_execute_dft_r2c*(p: fftw_plan; `in`: ptr cdouble;
-                           `out`: ptr fftw_complex) {.cdecl,
-    importc: "fftw_execute_dft_r2c", dynlib: LibraryName.}
-proc fftw_execute_dft_c2r*(p: fftw_plan; `in`: ptr fftw_complex;
-                           `out`: ptr cdouble) {.cdecl,
-    importc: "fftw_execute_dft_c2r", dynlib: LibraryName.}
-
-proc fftw_execute_split_dft_r2c*(p: fftw_plan; `in`: ptr cdouble;
-                                 ro: ptr cdouble; io: ptr cdouble) {.cdecl,
-    importc: "fftw_execute_split_dft_r2c", dynlib: LibraryName.}
-proc fftw_execute_split_dft_c2r*(p: fftw_plan; ri: ptr cdouble; ii: ptr cdouble;
-                                 `out`: ptr cdouble) {.cdecl,
-    importc: "fftw_execute_split_dft_c2r", dynlib: LibraryName.}
-proc fftw_plan_many_r2r*(rank: cint; n: ptr cint; howmany: cint;
-                         `in`: ptr cdouble; inembed: ptr cint; istride: cint;
-                         idist: cint; `out`: ptr cdouble; onembed: ptr cint;
-                         ostride: cint; odist: cint; kind: ptr fftw_r2r_kind;
-                         flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_many_r2r", dynlib: LibraryName.}
-
-proc fftw_plan_r2r*(rank: cint; n: ptr cint; `in`: ptr cdouble;
-                    `out`: ptr cdouble; kind: ptr fftw_r2r_kind; flags: cuint): fftw_plan {.
-    cdecl, importc: "fftw_plan_r2r", dynlib: LibraryName.}
-proc fftw_plan_r2r_1d*(n: cint; `in`: ptr cdouble; `out`: ptr cdouble;
-                       kind: fftw_r2r_kind; flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_r2r_1d", dynlib: LibraryName.}
-proc fftw_plan_r2r_2d*(n0: cint; n1: cint; `in`: ptr cdouble;
-                       `out`: ptr cdouble; kind0: fftw_r2r_kind;
-                       kind1: fftw_r2r_kind; flags: cuint): fftw_plan {.cdecl,
-    importc: "fftw_plan_r2r_2d", dynlib: LibraryName.}
-proc fftw_plan_r2r_3d*(n0: cint; n1: cint; n2: cint; `in`: ptr cdouble;
-                       `out`: ptr cdouble; kind0: fftw_r2r_kind;
-                       kind1: fftw_r2r_kind; kind2: fftw_r2r_kind; flags: cuint): fftw_plan {.
-    cdecl, importc: "fftw_plan_r2r_3d", dynlib: LibraryName.}
-
 proc fftw_plan_guru_r2r*(rank: cint; dims: ptr fftw_iodim; howmany_rank: cint;
                          howmany_dims: ptr fftw_iodim; `in`: ptr cdouble;
                          `out`: ptr cdouble; kind: ptr fftw_r2r_kind;
@@ -230,8 +460,7 @@ proc fftw_plan_guru64_r2r*(rank: cint; dims: ptr fftw_iodim64;
                            `in`: ptr cdouble; `out`: ptr cdouble;
                            kind: ptr fftw_r2r_kind; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_guru64_r2r", dynlib: LibraryName.}
-proc fftw_execute_r2r*(p: fftw_plan; `in`: ptr cdouble; `out`: ptr cdouble) {.
-    cdecl, importc: "fftw_execute_r2r", dynlib: LibraryName.}
+
 proc fftw_destroy_plan*(p: fftw_plan) {.cdecl, importc: "fftw_destroy_plan",
                                         dynlib: LibraryName.}
 proc fftw_forget_wisdom*() {.cdecl, importc: "fftw_forget_wisdom",
@@ -285,153 +514,4 @@ var fftw_cc* {.importc: "fftw_cc", dynlib: LibraryName.}: ptr char
 
 var fftw_codelet_optim* {.importc: "fftw_codelet_optim", dynlib: LibraryName.}: ptr char
 
-
-# Arraymancer non-official API for ease of use
-
-import arraymancer
-import sequtils
-
-proc fftw_plan_dft*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  ## Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, output.get_data_ptr,sign, flags)
-
-proc fftw_plan_dft_1d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 1D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 1)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_1d(shape[0], input.get_data_ptr, output.get_data_ptr,sign, flags)
-
-proc fftw_plan_dft_2d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 2D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 2)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_2d(shape[0], shape[1], input.get_data_ptr, output.get_data_ptr,sign, flags)
-
-proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex], sign: cint, flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 3D Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 3)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
-
-
-# R2C Plan
-
-proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  ## Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
-
-proc fftw_plan_dft_r2c_1d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 1D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 1)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_r2c_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
-
-proc fftw_plan_dft_r2c_2d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 2D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 2)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_r2c_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
-
-proc fftw_plan_dft_r2c_3d*(input: Tensor[float64], output: Tensor[fftw_complex], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 3D Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 3)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_r2c_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr, flags)
-
-# C2R Plan
-
-proc fftw_plan_dft_c2r*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
-
-proc fftw_plan_dft_c2r_1d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 1D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 1)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_c2r_1d(shape[0], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
-
-proc fftw_plan_dft_c2r_2d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 2D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 2)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_c2r_2d(shape[0], shape[1], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
-
-proc fftw_plan_dft_c2r_3d*(input: Tensor[fftw_complex], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 3D Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 3)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_dft_c2r_3d(shape[0], shape[1], shape[2], input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr), flags)
-
-# R2R Plan
-
-proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0].unsafeaddr, flags)
-
-proc fftw_plan_r2r_1d*(input: Tensor[float64], output: Tensor[float64], kind: fftw_r2r_kind, flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 1D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 1)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_r2r_1d(shape[0], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kind, flags)
-
-proc fftw_plan_r2r_2d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 2D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 2)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_r2r_2d(shape[0], shape[1], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], flags)
-
-proc fftw_plan_r2r_3d*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind], flags: cuint = FFTW_MEASURE): fftw_plan=
-  ## 3D real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-  assert(input.rank == 3)
-  let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
-  result = fftw_plan_r2r_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], kinds[2], flags)
-
-# Execute Plan with new Tensor
-
-proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
-  ## Execute a plan on new Tensor
-  fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)
-
-proc fftw_execute_dft_r2c*(p: fftw_plan, input: Tensor[float64], output: Tensor[fftw_complex])=
-  ## Execute a real-to-complex plan on new Tensor
-  fftw_execute_dft_r2c(p, cast[ptr cdouble](input.get_data_ptr), output.get_data_ptr)
-
-proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: Tensor[float64])=
-  ## Execute a complex-to-real plan on new Tensor
-  fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
-
-# Utility procedures
-
-import arraymancer/../tensor/private/p_accessors
-
-proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
-  ## Circshift
-  assert(t.rank == shift.len)
-  let shape = t.shape.toSeq
-  result = newTensor[T](t.shape.toSeq)
-  for coord, values in t:
-    var newcoord : seq[int] = newSeq[int](t.rank)
-    for i in 0..<t.rank:
-      newcoord[i] = (coord[i]+shift[i]) mod shape[i]
-    result.atIndexMut(newcoord, values)
-
-proc fftshift*[T](t: Tensor[T]): Tensor[T]=
-  ## Calculate fftshift using circshift
-  let xshift = t.shape[0] div 2
-  let yshift = t.shape[1] div 2
-  let zshift = t.shape[2] div 2
-  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
-
-proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
-  ## Calculate inverse fftshift using circshift
-  let xshift = (t.shape[0]+1) div 2
-  let yshift = (t.shape[1]+1) div 2
-  let zshift = (t.shape[2]+1) div 2
-  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 
