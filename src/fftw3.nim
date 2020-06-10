@@ -98,10 +98,44 @@ type
   fftw_plan* = pointer
 
 # Utility procedures
+proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int, zshift: int): Tensor[T]=
+  assert(t.rank == 3)
+  var X = t.shape[0]
+  var Y = t.shape[1]
+  var Z = t.shape[2]
 
-proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
-  ## Circshift
-  assert(t.rank == shift.len)
+  result = newTensor[T](t.shape.toSeq)
+  for i in 0||(X-1):
+    var ii = (i + xshift) mod X
+    for j in 0||(Y-1):
+      var jj = (j + yshift) mod Y
+      for k in 0||(Z-1):
+        var kk = (k + zshift) mod Z
+        result[ii, jj, kk] = t[i, j, k]
+
+proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int): Tensor[T]=
+  assert(t.rank == 2)
+  var X = t.shape[0]
+  var Y = t.shape[1]
+
+  result = newTensor[T](t.shape.toSeq)
+  for i in 0||(X-1):
+    var ii = (i + xshift) mod X
+    for j in 0||(Y-1):
+      var jj = (j + yshift) mod Y
+      result[ii, jj] = t[i, j]
+
+proc circshift_impl[T](t: Tensor[T], xshift: int): Tensor[T]=
+  assert(t.rank == 1)
+  var X = t.shape[0]
+
+  result = newTensor[T](t.shape.toSeq)
+  for i in 0||(X-1):
+    var ii = (i + xshift) mod X
+    result[ii] = t[i]
+
+# TODO : Generic implementation in parallel
+proc circshift_impl[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
   let shape = t.shape.toSeq
   result = newTensor[T](t.shape.toSeq)
   for coord, values in t:
@@ -109,6 +143,19 @@ proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
     for i in 0..<t.rank:
       newcoord[i] = (coord[i]+shift[i]) mod shape[i]
     result.atIndexMut(newcoord, values)
+
+proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
+  ## Generic Circshift
+  assert(t.rank == shift.len)
+  case t.rank
+  of 1:
+    result = circshift_impl(t, shift[0])
+  of 2:
+    result = circshift_impl(t, shift[0], shift[1])
+  of 3:
+    result = circshift_impl(t, shift[0], shift[1], shift[2])
+  else:
+    result = circshift_impl(t, shift)
 
 proc fftshift*[T](t: Tensor[T]): Tensor[T]=
   ## Calculate fftshift using circshift
