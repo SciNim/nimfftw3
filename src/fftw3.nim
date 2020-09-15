@@ -42,7 +42,7 @@
 ##   # Execute plan in-place
 ##   fftw_execute(plan)
 
-# Arraymancer non-official API for ease of use
+## Arraymancer non-official API for ease of use
 
 import arraymancer
 import sequtils
@@ -97,7 +97,8 @@ type
   fftw_complex* = Complex64
   fftw_plan* = pointer
 
-# Utility procedures
+## FFT Shift
+## Because FFT-Shift is used in many FFT based Algorithm
 proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int, zshift: int): Tensor[T]=
   assert(t.rank == 3)
   var X = t.shape[0]
@@ -171,6 +172,7 @@ proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
   let zshift = (t.shape[2]+1) div 2
   result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 
+## FFTW Execute API
 
 proc fftw_execute*(p: fftw_plan) {.cdecl, importc: "fftw_execute",
                                    dynlib: LibraryName.}
@@ -205,7 +207,6 @@ proc fftw_execute_dft_c2r*(p: fftw_plan, input: Tensor[fftw_complex],   output: 
   fftw_execute_dft_c2r(p, input.get_data_ptr, cast[ptr cdouble](output.get_data_ptr))
 
 
-
 proc fftw_execute_split_dft*(p: fftw_plan; ri: ptr cdouble; ii: ptr cdouble;
                              ro: ptr cdouble; io: ptr cdouble) {.cdecl,
     importc: "fftw_execute_split_dft", dynlib: LibraryName.}
@@ -219,7 +220,7 @@ proc fftw_execute_split_dft_c2r*(p: fftw_plan; ri: ptr cdouble; ii: ptr cdouble;
     importc: "fftw_execute_split_dft_c2r", dynlib: LibraryName.}
 
 
-
+## FFTW Plan API
 
 proc fftw_plan_dft*(rank: cint; n: ptr cint; `in`: ptr fftw_complex;
                     `out`: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan {.
@@ -262,7 +263,6 @@ proc fftw_plan_dft_3d*(input: Tensor[fftw_complex], output: Tensor[fftw_complex]
   assert(input.rank == 3)
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_dft_3d(shape[0], shape[1], shape[2], input.get_data_ptr, output.get_data_ptr,sign, flags)
-
 
 
 proc fftw_plan_dft_r2c*(rank: cint; n: ptr cint; `in`: ptr cdouble;
@@ -395,6 +395,7 @@ proc fftw_plan_r2r_3d*(input: Tensor[float64], output: Tensor[float64], kinds: s
   let shape : seq[cint] = map(input.shape.toSeq, proc(x: int): cint= x.cint)
   result = fftw_plan_r2r_3d(shape[0], shape[1], shape[2], cast[ptr cdouble](input.get_data_ptr), cast[ptr cdouble](output.get_data_ptr), kinds[0], kinds[1], kinds[2], flags)
 
+## FFTW Plan Many API
 
 proc fftw_plan_many_dft*(rank: cint; n: ptr cint; howmany: cint;
                          `in`: ptr fftw_complex; inembed: ptr cint;
@@ -428,6 +429,8 @@ proc fftw_plan_many_r2r*(rank: cint; n: ptr cint; howmany: cint;
 
 
 
+## FFTW "Guru" API
+## This is the "I know what I'm doing and want to optimize every last bits of performance" API of FFTW
 
 proc fftw_plan_guru_dft*(rank: cint; dims: ptr fftw_iodim; howmany_rank: cint;
                          howmany_dims: ptr fftw_iodim; `in`: ptr fftw_complex;
@@ -507,6 +510,8 @@ proc fftw_plan_guru64_r2r*(rank: cint; dims: ptr fftw_iodim64;
                            `in`: ptr cdouble; `out`: ptr cdouble;
                            kind: ptr fftw_r2r_kind; flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_guru64_r2r", dynlib: LibraryName.}
+
+## FFTW Utility & Cleanup API
 
 proc fftw_destroy_plan*(p: fftw_plan) {.cdecl, importc: "fftw_destroy_plan",
                                         dynlib: LibraryName.}
