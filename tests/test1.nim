@@ -30,6 +30,8 @@ proc main()=
   var orig = newTensor[Complex64](dims)
   let ifft = fftw_plan_dft(output, orig, FFTW_BACKWARD, FFTW_ESTIMATE)
   fftw_execute_dft(ifft, output, orig)
+
+  # FFTW does not normalize inverse fft
   let size = complex(orig.size.float64)
   orig = orig /. size
 
@@ -37,5 +39,6 @@ proc main()=
     check compare(randData, orig.map(x => x.re))
 
   fftw_destroy_plan(fft)
+  fftw_destroy_plan(ifft)
 
 main()
