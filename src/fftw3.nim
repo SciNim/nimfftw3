@@ -161,7 +161,7 @@ proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
 proc fftshift*[T](t: Tensor[T]): Tensor[T]=
   runnableExamples:
     import arraymancer
-    let input_tensor = randomTensor(10, 10, 10, 10.0)
+    let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
     # output_tensor is the fftshift of input_tensor
     var output_tensor = fftshift(input_tensor)
 
@@ -174,7 +174,7 @@ proc fftshift*[T](t: Tensor[T]): Tensor[T]=
 proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
   runnableExamples:
     import arraymancer
-    let input_tensor = randomTensor(10, 10, 10, 10.0)
+    let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
     # output_tensor is the fftshift of input_tensor
     var output_tensor = ifftshift(input_tensor)
 

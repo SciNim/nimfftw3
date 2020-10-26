@@ -877,7 +877,7 @@ Generic Circshift
 
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
-</span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
+</span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
 </span><span class="Comment"># output_tensor is the fftshift of input_tensor</span><span class="Whitespace">
 </span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">output_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">fftshift</span><span class="Punctuation">(</span><span class="Identifier">input_tensor</span><span class="Punctuation">)</span></pre>Calculate fftshift using circshift
 
@@ -889,7 +889,7 @@ Generic Circshift
 
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
-</span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
+</span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
 </span><span class="Comment"># output_tensor is the fftshift of input_tensor</span><span class="Whitespace">
 </span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">output_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">ifftshift</span><span class="Punctuation">(</span><span class="Identifier">input_tensor</span><span class="Punctuation">)</span></pre>Calculate inverse fftshift using circshift
 
@@ -1701,7 +1701,7 @@ Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fft
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-10-26 17:10:08 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-10-26 17:16:21 UTC</small>
       </div>
     </div>
   </div>
