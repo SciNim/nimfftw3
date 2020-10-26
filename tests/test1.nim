@@ -1,4 +1,3 @@
-import unittest
 import sugar
 
 import fftw3
@@ -10,7 +9,7 @@ import random
 import times
 import system
 
-proc main()=
+block: # fftw_plan_dft, fftw_execute_dft
   let dims = @[4, 3, 2*7-1]
 
   var randData: Tensor[float64] = randomTensor(dims, 10).astype(float64)
@@ -35,10 +34,7 @@ proc main()=
   let size = complex(orig.size.float64)
   orig = orig /. size
 
-  test "fftw_plan_dft ifft(fft(x)) compared to original data":
-    check compare(randData, orig.map(x => x.re))
+  doAssert compare(randData, orig.map(x => x.re))
 
   fftw_destroy_plan(fft)
   fftw_destroy_plan(ifft)
-
-main()
