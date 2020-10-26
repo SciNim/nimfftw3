@@ -159,6 +159,12 @@ proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T]=
     result = circshift_impl(t, shift)
 
 proc fftshift*[T](t: Tensor[T]): Tensor[T]=
+  runnableExamples:
+    import arraymancer
+    let input_tensor = randomTensor(10, 10, 10, 10.0)
+    # output_tensor is the fftshift of input_tensor
+    var output_tensor = fftshift(input_tensor)
+
   ## Calculate fftshift using circshift
   let xshift = t.shape[0] div 2
   let yshift = t.shape[1] div 2
@@ -166,6 +172,12 @@ proc fftshift*[T](t: Tensor[T]): Tensor[T]=
   result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 
 proc ifftshift*[T](t: Tensor[T]): Tensor[T]=
+  runnableExamples:
+    import arraymancer
+    let input_tensor = randomTensor(10, 10, 10, 10.0)
+    # output_tensor is the fftshift of input_tensor
+    var output_tensor = ifftshift(input_tensor)
+
   ## Calculate inverse fftshift using circshift
   let xshift = (t.shape[0]+1) div 2
   let yshift = (t.shape[1]+1) div 2
@@ -182,7 +194,32 @@ proc fftw_execute_dft*(p: fftw_plan; `in`: ptr fftw_complex;
     importc: "fftw_execute_dft", dynlib: LibraryName.}
 
 proc fftw_execute_dft*(p: fftw_plan, input: Tensor[fftw_complex], output: Tensor[fftw_complex])=
-  ## Execute a plan on new Tensor
+  runnableExamples:
+    import arraymancer
+    import fftw3
+
+    let shape = @[100, 100]
+    # Create dummy tensors
+    var
+      dummy_input = newTensor[Complex64](shape)
+      dummy_output = newTensor[Complex64](shape)
+    # Use dummy tensor to create plan
+    var plan : fftw_plan = fftw_plan_dft(dummy_input, dummy_output, FFTW_FORWARD, FFTW_ESTIMATE)
+
+    # Allocate output Tensor
+    # It is crucial to NOT modify the dimensions of the tensor
+    var inputRe: Tensor[float64] = randomTensor[float64](shape, 10.0)
+    var inputIm: Tensor[float64] = randomTensor[float64](shape, 20.0)
+
+    var input = map2_inline(inputRe, inputIm):
+      complex64(x, y)
+
+    let in_shape = @(input.shape)
+    var output = newTensor[Complex64](in_shape)
+
+    # Execute plan with output_tensor and input_tensor
+    fftw_execute_dft(plan, input, output)  ## Execute a plan on new Tensor
+
   fftw_execute_dft(p, input.get_data_ptr, output.get_data_ptr)
 
 proc fftw_execute_r2r*(p: fftw_plan; `in`: ptr cdouble; `out`: ptr cdouble) {.
@@ -565,5 +602,3 @@ var fftw_version* {.importc: "fftw_version", dynlib: LibraryName.}: ptr char
 var fftw_cc* {.importc: "fftw_cc", dynlib: LibraryName.}: ptr char
 
 var fftw_codelet_optim* {.importc: "fftw_codelet_optim", dynlib: LibraryName.}: ptr char
-
-
