@@ -47,7 +47,7 @@
 import arraymancer
 import sequtils
 import complex
-import arraymancer/../tensor/private/p_accessors
+import arraymancer/tensor/private/p_accessors
 
 
 when defined(windows):
@@ -581,11 +581,11 @@ proc fftw_print_plan*(p: fftw_plan) {.cdecl, importc: "fftw_print_plan",
                                       dynlib: LibraryName.}
 proc fftw_sprint_plan*(p: fftw_plan): cstring {.cdecl,
     importc: "fftw_sprint_plan", dynlib: LibraryName.}
-proc fftw_malloc*(n: csize): pointer {.cdecl, importc: "fftw_malloc",
+proc fftw_malloc*(n: csize_t): pointer {.cdecl, importc: "fftw_malloc",
                                        dynlib: LibraryName.}
-proc fftw_alloc_real*(n: csize): ptr cdouble {.cdecl,
+proc fftw_alloc_real*(n: csize_t): ptr cdouble {.cdecl,
     importc: "fftw_alloc_real", dynlib: LibraryName.}
-proc fftw_alloc_complex*(n: csize): ptr fftw_complex {.cdecl,
+proc fftw_alloc_complex*(n: csize_t): ptr fftw_complex {.cdecl,
     importc: "fftw_alloc_complex", dynlib: LibraryName.}
 proc fftw_free*(p: pointer) {.cdecl, importc: "fftw_free", dynlib: LibraryName.}
 proc fftw_flops*(p: fftw_plan; add: ptr cdouble; mul: ptr cdouble;
