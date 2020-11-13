@@ -8,7 +8,7 @@ Use nimble `nimble install fftw3` to install the latest released version
 
 I advise to read the fftw documentation :
 
-You can find the generated documentation here with the complete API and examples : https://clonkk.github.io/nimfftw3/doc/fftw3.html
+You can find the documentation here with the complete API and examples : https://clonkk.github.io/nimfftw3/
 
 # History
 
