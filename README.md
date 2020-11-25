@@ -13,7 +13,7 @@ If you don't know how to use FFTW, read the official FFTW's documentation : http
 
 # Contributing and evolution
 
-Any help and contribution is welcomed !
+Any help and contribution is welcome !
 
 As much as possible, breaking change in API should be avoided.
 Improving documentation and providing better high-level API are the focus for now.
