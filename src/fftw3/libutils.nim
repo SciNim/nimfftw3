@@ -28,7 +28,8 @@ type
 
     fftw_write_char_func* = proc (c: char, a3: pointer) {.cdecl.}
     fftw_read_char_func* = proc (a2: pointer): cint {.cdecl.}
-    fftw_complex* = Complex64
+    # Deprecated -> Use complex
+    fftw_complex = Complex64
     fftw_plan* = pointer
 
 

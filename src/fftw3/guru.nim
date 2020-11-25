@@ -1,4 +1,5 @@
 import libutils
+import complex
 
 ## FFTW Guru API for experts who knows what they're doing.
 
@@ -15,8 +16,8 @@ proc fftw_execute_split_dft_c2r*(p: fftw_plan, ri: ptr cdouble, ii: ptr cdouble,
 
 # FFTW "Guru" API
 proc fftw_plan_guru_dft*(rank: cint, dims: ptr fftw_iodim, howmany_rank: cint,
-                         howmany_dims: ptr fftw_iodim, inptr: ptr fftw_complex,
-                         outptr: ptr fftw_complex, sign: cint, flags: cuint): fftw_plan {.
+                         howmany_dims: ptr fftw_iodim, inptr: ptr Complex64,
+                         outptr: ptr Complex64, sign: cint, flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_guru_dft", dynlib: Fftw3Lib.}
 proc fftw_plan_guru_split_dft*(rank: cint, dims: ptr fftw_iodim,
                                howmany_rank: cint, howmany_dims: ptr fftw_iodim,
@@ -25,7 +26,7 @@ proc fftw_plan_guru_split_dft*(rank: cint, dims: ptr fftw_iodim,
     cdecl, importc: "fftw_plan_guru_split_dft", dynlib: Fftw3Lib.}
 proc fftw_plan_guru64_dft*(rank: cint, dims: ptr fftw_iodim64,
                            howmany_rank: cint, howmany_dims: ptr fftw_iodim64,
-                           inptr: ptr fftw_complex, outptr: ptr fftw_complex,
+                           inptr: ptr Complex64, outptr: ptr Complex64,
                            sign: cint, flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_guru64_dft", dynlib: Fftw3Lib.}
 proc fftw_plan_guru64_split_dft*(rank: cint, dims: ptr fftw_iodim64,
@@ -36,12 +37,12 @@ proc fftw_plan_guru64_split_dft*(rank: cint, dims: ptr fftw_iodim64,
     cdecl, importc: "fftw_plan_guru64_split_dft", dynlib: Fftw3Lib.}
 proc fftw_plan_guru_dft_r2c*(rank: cint, dims: ptr fftw_iodim,
                              howmany_rank: cint, howmany_dims: ptr fftw_iodim,
-                             inptr: ptr cdouble, outptr: ptr fftw_complex,
+                             inptr: ptr cdouble, outptr: ptr Complex64,
                              flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_guru_dft_r2c", dynlib: Fftw3Lib.}
 proc fftw_plan_guru_dft_c2r*(rank: cint, dims: ptr fftw_iodim,
                              howmany_rank: cint, howmany_dims: ptr fftw_iodim,
-                             inptr: ptr fftw_complex, outptr: ptr cdouble,
+                             inptr: ptr Complex64, outptr: ptr cdouble,
                              flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_guru_dft_c2r", dynlib: Fftw3Lib.}
 proc fftw_plan_guru_split_dft_r2c*(rank: cint, dims: ptr fftw_iodim,
@@ -59,13 +60,13 @@ proc fftw_plan_guru_split_dft_c2r*(rank: cint, dims: ptr fftw_iodim,
 proc fftw_plan_guru64_dft_r2c*(rank: cint, dims: ptr fftw_iodim64,
                                howmany_rank: cint,
                                howmany_dims: ptr fftw_iodim64,
-                               inptr: ptr cdouble, outptr: ptr fftw_complex,
+                               inptr: ptr cdouble, outptr: ptr Complex64,
                                flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_guru64_dft_r2c", dynlib: Fftw3Lib.}
 proc fftw_plan_guru64_dft_c2r*(rank: cint, dims: ptr fftw_iodim64,
                                howmany_rank: cint,
                                howmany_dims: ptr fftw_iodim64,
-                               inptr: ptr fftw_complex, outptr: ptr cdouble,
+                               inptr: ptr Complex64, outptr: ptr cdouble,
                                flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_guru64_dft_c2r", dynlib: Fftw3Lib.}
 proc fftw_plan_guru64_split_dft_r2c*(rank: cint, dims: ptr fftw_iodim64,

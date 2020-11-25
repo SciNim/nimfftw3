@@ -1,18 +1,18 @@
 import sugar
-
-import fftw3
-import utils
-
-import arraymancer
-
 import random
 import times
 import system
+import arraymancer
+
+import fftw3
+import fftw3/libutils
+
+import utils
 
 block: # fftw_plan_dft, fftw_execute_dft
   let dims = @[4, 3, 2*7-1]
 
-  var randData: Tensor[float64] = randomTensor(dims, 10).astype(float64)
+  var randData: Tensor[float64] = newTensor[float64](dims)
 
   var r = initRand(epochTime().int64)
   apply_inline(randData):

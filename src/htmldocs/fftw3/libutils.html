@@ -117,8 +117,6 @@ function main() {
     title="fftw_write_char_func = proc (c: char; a3: pointer) {.cdecl.}"><wbr />fftw_<wbr />write_<wbr />char_<wbr />func<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#fftw_read_char_func"
     title="fftw_read_char_func = proc (a2: pointer): cint {.cdecl.}"><wbr />fftw_<wbr />read_<wbr />char_<wbr />func<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#fftw_complex"
-    title="fftw_complex = Complex64"><wbr />fftw_<wbr />complex<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#fftw_plan"
     title="fftw_plan = pointer"><wbr />fftw_<wbr />plan<span class="attachedType"></span></a></li>
 
@@ -175,7 +173,7 @@ function main() {
   </ul>
   <ul class="simple nested-toc-section">fftw_alloc_complex
       <li><a class="reference" href="#fftw_alloc_complex%2Ccsize_t"
-    title="fftw_alloc_complex(n: csize_t): ptr fftw_complex">fftw_alloc_complex,csize_t<span class="attachedType">fftw_complex</span></a></li>
+    title="fftw_alloc_complex(n: csize_t): ptr fftw_complex">fftw_alloc_complex,csize_t<span class="attachedType"></span></a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_fprint_plan
@@ -282,13 +280,6 @@ function main() {
 
 
 </dd>
-<a id="fftw_complex"></a>
-<dt><pre><a href="libutils.html#fftw_complex"><span class="Identifier">fftw_complex</span></a> <span class="Other">=</span> <span class="Identifier">Complex64</span></pre></dt>
-<dd>
-
-
-
-</dd>
 <a id="fftw_plan"></a>
 <dt><pre><a href="libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span class="Other">=</span> <span class="Identifier">pointer</span></pre></dt>
 <dd>
@@ -385,7 +376,7 @@ function main() {
 
 </dd>
 <a id="fftw_alloc_complex,csize_t"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fftw_alloc_complex%2Ccsize_t"><span class="Identifier">fftw_alloc_complex</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">csize_t</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">ptr</span> <a href="libutils.html#fftw_complex"><span class="Identifier">fftw_complex</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">cdecl</span><span class="Other">,</span>
+<dt><pre><span class="Keyword">proc</span> <a href="#fftw_alloc_complex%2Ccsize_t"><span class="Identifier">fftw_alloc_complex</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">csize_t</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">fftw_complex</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">cdecl</span><span class="Other">,</span>
     <span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;fftw_alloc_complex&quot;</span><span class="Other">,</span> <span class="Identifier">dynlib</span><span class="Other">:</span> <span class="Identifier">Fftw3Lib</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
@@ -442,7 +433,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-25 11:08:42 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-25 11:31:13 UTC</small>
       </div>
     </div>
   </div>
