@@ -420,7 +420,7 @@ function main() {
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="libutils.html">libutils</a>
+<a class="reference external" href="libutils.html">libutils</a>, <a class="reference external" href="guru.html">guru</a>, <a class="reference external" href="wisdom.html">wisdom</a>
 </dl></div>
 <div class="section" id="10">
 <h1><a class="toc-backref" href="#10">Consts</a></h1>
@@ -429,35 +429,45 @@ function main() {
 <dt><pre><a href="fftw3.html#FFTW_MEASURE"><span class="Identifier">FFTW_MEASURE</span></a> <span class="Other">=</span> <span class="DecNumber">0</span></pre></dt>
 <dd>
 
-Find an optimized plan by computing several FFTs and measuring their execution time. Default planning option.
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>Find an optimized plan by computing several FFTs and measuring their execution time. Default planning option.</p>
+
 
 </dd>
 <a id="FFTW_ESTIMATE"></a>
 <dt><pre><a href="fftw3.html#FFTW_ESTIMATE"><span class="Identifier">FFTW_ESTIMATE</span></a> <span class="Other">=</span> <span class="DecNumber">64</span></pre></dt>
 <dd>
 
-Instead of time measurements, a simple heuristic is used to pick a plan quickly. The input/output arrays are not overwritten during planning.
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>Instead of time measurements, a simple heuristic is used to pick a plan quickly. The input/output arrays are not overwritten during planning.</p>
+
 
 </dd>
 <a id="FFTW_PATIENT"></a>
 <dt><pre><a href="fftw3.html#FFTW_PATIENT"><span class="Identifier">FFTW_PATIENT</span></a> <span class="Other">=</span> <span class="DecNumber">32</span></pre></dt>
 <dd>
 
-Like FFTW_MEASURE, but considers a wider range of algorithms.
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>Like FFTW_MEASURE, but considers a wider range of algorithms.</p>
+
 
 </dd>
 <a id="FFTW_EXHAUSTIVE"></a>
 <dt><pre><a href="fftw3.html#FFTW_EXHAUSTIVE"><span class="Identifier">FFTW_EXHAUSTIVE</span></a> <span class="Other">=</span> <span class="DecNumber">8</span></pre></dt>
 <dd>
 
-Like FFTW_PATIENT, but considers an even wider range of algorithms.
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>Like FFTW_PATIENT, but considers an even wider range of algorithms.</p>
+
 
 </dd>
 <a id="FFTW_WISDOM_ONLY"></a>
 <dt><pre><a href="fftw3.html#FFTW_WISDOM_ONLY"><span class="Identifier">FFTW_WISDOM_ONLY</span></a> <span class="Other">=</span> <span class="DecNumber">2097152</span></pre></dt>
 <dd>
 
-Special planning mode in which the plan is created only if wisdow is available.
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>Special planning mode in which the plan is created only if wisdow is available.</p>
+
 
 </dd>
 <a id="FFTW_DESTROY_INPUT"></a>
@@ -473,14 +483,18 @@ Special planning mode in which the plan is created only if wisdow is available.
 <dt><pre><a href="fftw3.html#FFTW_PRESERVE_INPUT"><span class="Identifier">FFTW_PRESERVE_INPUT</span></a> <span class="Other">=</span> <span class="DecNumber">16</span></pre></dt>
 <dd>
 
-An out-of-place transform must not change its input array. Default value except for complex-to-real (c2r and hc2r).
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>An out-of-place transform must not change its input array. Default value except for complex-to-real (c2r and hc2r).</p>
+
 
 </dd>
 <a id="FFTW_UNALIGNED"></a>
 <dt><pre><a href="fftw3.html#FFTW_UNALIGNED"><span class="Identifier">FFTW_UNALIGNED</span></a> <span class="Other">=</span> <span class="DecNumber">2</span></pre></dt>
 <dd>
 
-The algorithm may not impose any unusual alignment requirements on the input/output arrays.(i.e. no SIMD may be used).
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> planner flag.</p>
+<p>The algorithm may not impose any unusual alignment requirements on the input/output arrays.(i.e. no SIMD may be used).</p>
+
 
 </dd>
 <a id="FFTW_CONSERVE_MEMORY"></a>
@@ -494,14 +508,18 @@ The algorithm may not impose any unusual alignment requirements on the input/out
 <dt><pre><a href="fftw3.html#FFTW_FORWARD"><span class="Identifier">FFTW_FORWARD</span></a> <span class="Other">=</span> <span class="DecNumber">-1</span></pre></dt>
 <dd>
 
-<tt class="docutils literal"><span class="pre">fftw_plan</span></tt> sign for a DFT
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> sign flag.</p>
+<p>Compute a DFT transform.</p>
+
 
 </dd>
 <a id="FFTW_BACKWARD"></a>
 <dt><pre><a href="fftw3.html#FFTW_BACKWARD"><span class="Identifier">FFTW_BACKWARD</span></a> <span class="Other">=</span> <span class="DecNumber">1</span></pre></dt>
 <dd>
 
-<tt class="docutils literal"><span class="pre">fftw_plan</span></tt> sign for inverse DFT
+<p><tt class="docutils literal"><span class="pre">fftw_plan</span></tt> sign flag.</p>
+<p>Compute an inverse DFT transform.</p>
+
 
 </dd>
 
@@ -1003,7 +1021,7 @@ All existing plans become undefined, and you should not attempt to execute them 
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-25 10:59:38 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-25 11:08:44 UTC</small>
       </div>
     </div>
   </div>

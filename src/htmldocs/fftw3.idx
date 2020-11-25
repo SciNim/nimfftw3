@@ -1,14 +1,17 @@
 Introduction	fftw3.html#introduction	 Introduction	
 Examples	fftw3.html#examples	 Examples	
+C-Binding low-level example	fftw3.html#examples-cminusbinding-lowminuslevel-example	  C-Binding low-level example	
+Arraymancer API example	fftw3.html#examples-arraymancer-api-example	  Arraymancer API example	
+Planner flags	fftw3.html#planner-flags	 Planner flags	
 FFTW_MEASURE	fftw3.html#FFTW_MEASURE	fftw3: FFTW_MEASURE	
+FFTW_ESTIMATE	fftw3.html#FFTW_ESTIMATE	fftw3: FFTW_ESTIMATE	
+FFTW_PATIENT	fftw3.html#FFTW_PATIENT	fftw3: FFTW_PATIENT	
+FFTW_EXHAUSTIVE	fftw3.html#FFTW_EXHAUSTIVE	fftw3: FFTW_EXHAUSTIVE	
+FFTW_WISDOM_ONLY	fftw3.html#FFTW_WISDOM_ONLY	fftw3: FFTW_WISDOM_ONLY	
 FFTW_DESTROY_INPUT	fftw3.html#FFTW_DESTROY_INPUT	fftw3: FFTW_DESTROY_INPUT	
+FFTW_PRESERVE_INPUT	fftw3.html#FFTW_PRESERVE_INPUT	fftw3: FFTW_PRESERVE_INPUT	
 FFTW_UNALIGNED	fftw3.html#FFTW_UNALIGNED	fftw3: FFTW_UNALIGNED	
 FFTW_CONSERVE_MEMORY	fftw3.html#FFTW_CONSERVE_MEMORY	fftw3: FFTW_CONSERVE_MEMORY	
-FFTW_EXHAUSTIVE	fftw3.html#FFTW_EXHAUSTIVE	fftw3: FFTW_EXHAUSTIVE	
-FFTW_PRESERVE_INPUT	fftw3.html#FFTW_PRESERVE_INPUT	fftw3: FFTW_PRESERVE_INPUT	
-FFTW_PATIENT	fftw3.html#FFTW_PATIENT	fftw3: FFTW_PATIENT	
-FFTW_ESTIMATE	fftw3.html#FFTW_ESTIMATE	fftw3: FFTW_ESTIMATE	
-FFTW_WISDOM_ONLY	fftw3.html#FFTW_WISDOM_ONLY	fftw3: FFTW_WISDOM_ONLY	
 FFTW_FORWARD	fftw3.html#FFTW_FORWARD	fftw3: FFTW_FORWARD	
 FFTW_BACKWARD	fftw3.html#FFTW_BACKWARD	fftw3: FFTW_BACKWARD	
 circshift	fftw3.html#circshift,Tensor[T],seq[int]	fftw3: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]	

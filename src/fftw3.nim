@@ -48,6 +48,9 @@ import sequtils
 import complex
 import arraymancer/tensor/private/p_accessors
 import fftw3/libutils
+# Import mostly for documentation links
+import fftw3/guru
+import fftw3/wisdom
 # export used types
 export fftw_plan
 export fftw_r2r_kind
