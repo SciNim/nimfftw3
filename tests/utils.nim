@@ -1,7 +1,7 @@
 import arraymancer
 import complex
 
-const MIN_FLOAT_COMPARAISON = 1e-8
+const MIN_FLOAT_COMPARAISON = 1e-12
 
 proc compare*[T](a: Tensor[T], b:Tensor[T]): bool=
   if a.shape != b.shape:
@@ -12,6 +12,5 @@ proc compare*[T](a: Tensor[T], b:Tensor[T]): bool=
     let MA = max(abs(a))
     let MB = max(abs(b))
     let MIN_FLOAT_SCALED_COMPARAISON = MIN_FLOAT_COMPARAISON*(MA+MB)/2
-    echo max(diff)
     result = max(diff) < MIN_FLOAT_SCALED_COMPARAISON
 
