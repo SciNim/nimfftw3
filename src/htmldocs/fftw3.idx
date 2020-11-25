@@ -1,0 +1,63 @@
+Introduction	fftw3.html#introduction	 Introduction	
+Examples	fftw3.html#examples	 Examples	
+FFTW_MEASURE	fftw3.html#FFTW_MEASURE	fftw3: FFTW_MEASURE	
+FFTW_DESTROY_INPUT	fftw3.html#FFTW_DESTROY_INPUT	fftw3: FFTW_DESTROY_INPUT	
+FFTW_UNALIGNED	fftw3.html#FFTW_UNALIGNED	fftw3: FFTW_UNALIGNED	
+FFTW_CONSERVE_MEMORY	fftw3.html#FFTW_CONSERVE_MEMORY	fftw3: FFTW_CONSERVE_MEMORY	
+FFTW_EXHAUSTIVE	fftw3.html#FFTW_EXHAUSTIVE	fftw3: FFTW_EXHAUSTIVE	
+FFTW_PRESERVE_INPUT	fftw3.html#FFTW_PRESERVE_INPUT	fftw3: FFTW_PRESERVE_INPUT	
+FFTW_PATIENT	fftw3.html#FFTW_PATIENT	fftw3: FFTW_PATIENT	
+FFTW_ESTIMATE	fftw3.html#FFTW_ESTIMATE	fftw3: FFTW_ESTIMATE	
+FFTW_WISDOM_ONLY	fftw3.html#FFTW_WISDOM_ONLY	fftw3: FFTW_WISDOM_ONLY	
+FFTW_FORWARD	fftw3.html#FFTW_FORWARD	fftw3: FFTW_FORWARD	
+FFTW_BACKWARD	fftw3.html#FFTW_BACKWARD	fftw3: FFTW_BACKWARD	
+circshift	fftw3.html#circshift,Tensor[T],seq[int]	fftw3: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]	
+fftshift	fftw3.html#fftshift,Tensor[T]	fftw3: fftshift[T](t: Tensor[T]): Tensor[T]	
+ifftshift	fftw3.html#ifftshift,Tensor[T]	fftw3: ifftshift[T](t: Tensor[T]): Tensor[T]	
+fftw_execute	fftw3.html#fftw_execute,fftw_plan	fftw3: fftw_execute(p: fftw_plan)	
+fftw_execute_dft	fftw3.html#fftw_execute_dft,fftw_plan,ptr.fftw_complex,ptr.fftw_complex	fftw3: fftw_execute_dft(p: fftw_plan; inptr: ptr fftw_complex; outptr: ptr fftw_complex)	
+fftw_execute_dft	fftw3.html#fftw_execute_dft,fftw_plan,Tensor[fftw_complex],Tensor[fftw_complex]	fftw3: fftw_execute_dft(p: fftw_plan; input: Tensor[fftw_complex];\n                 output: Tensor[fftw_complex])	
+fftw_execute_r2r	fftw3.html#fftw_execute_r2r,fftw_plan,ptr.cdouble,ptr.cdouble	fftw3: fftw_execute_r2r(p: fftw_plan; inptr: ptr cdouble; outptr: ptr cdouble)	
+fftw_execute_dft_r2c	fftw3.html#fftw_execute_dft_r2c,fftw_plan,ptr.cdouble,ptr.fftw_complex	fftw3: fftw_execute_dft_r2c(p: fftw_plan; inptr: ptr cdouble; outptr: ptr fftw_complex)	
+fftw_execute_dft_r2c	fftw3.html#fftw_execute_dft_r2c,fftw_plan,Tensor[float64],Tensor[fftw_complex]	fftw3: fftw_execute_dft_r2c(p: fftw_plan; input: Tensor[float64];\n                     output: Tensor[fftw_complex])	
+fftw_execute_dft_c2r	fftw3.html#fftw_execute_dft_c2r,fftw_plan,ptr.fftw_complex,ptr.cdouble	fftw3: fftw_execute_dft_c2r(p: fftw_plan; inptr: ptr fftw_complex; outptr: ptr cdouble)	
+fftw_execute_dft_c2r	fftw3.html#fftw_execute_dft_c2r,fftw_plan,Tensor[fftw_complex],Tensor[float64]	fftw3: fftw_execute_dft_c2r(p: fftw_plan; input: Tensor[fftw_complex];\n                     output: Tensor[float64])	
+fftw_plan_dft	fftw3.html#fftw_plan_dft,cint,ptr.cint,ptr.fftw_complex,ptr.fftw_complex,cint,cuint	fftw3: fftw_plan_dft(rank: cint; n: ptr cint; inptr: ptr fftw_complex;\n              outptr: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan	
+fftw_plan_dft	fftw3.html#fftw_plan_dft,Tensor[fftw_complex],Tensor[fftw_complex],cint,cuint	fftw3: fftw_plan_dft(input: Tensor[fftw_complex]; output: Tensor[fftw_complex];\n              sign: cint; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_1d	fftw3.html#fftw_plan_dft_1d,cint,ptr.fftw_complex,ptr.fftw_complex,cint,cuint	fftw3: fftw_plan_dft_1d(n: cint; inptr: ptr fftw_complex; outptr: ptr fftw_complex;\n                 sign: cint; flags: cuint): fftw_plan	
+fftw_plan_dft_1d	fftw3.html#fftw_plan_dft_1d,Tensor[fftw_complex],Tensor[fftw_complex],cint,cuint	fftw3: fftw_plan_dft_1d(input: Tensor[fftw_complex]; output: Tensor[fftw_complex];\n                 sign: cint; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_2d	fftw3.html#fftw_plan_dft_2d,cint,cint,ptr.fftw_complex,ptr.fftw_complex,cint,cuint	fftw3: fftw_plan_dft_2d(n0: cint; n1: cint; inptr: ptr fftw_complex;\n                 outptr: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan	
+fftw_plan_dft_2d	fftw3.html#fftw_plan_dft_2d,Tensor[fftw_complex],Tensor[fftw_complex],cint,cuint	fftw3: fftw_plan_dft_2d(input: Tensor[fftw_complex]; output: Tensor[fftw_complex];\n                 sign: cint; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_3d	fftw3.html#fftw_plan_dft_3d,cint,cint,cint,ptr.fftw_complex,ptr.fftw_complex,cint,cuint	fftw3: fftw_plan_dft_3d(n0: cint; n1: cint; n2: cint; inptr: ptr fftw_complex;\n                 outptr: ptr fftw_complex; sign: cint; flags: cuint): fftw_plan	
+fftw_plan_dft_3d	fftw3.html#fftw_plan_dft_3d,Tensor[fftw_complex],Tensor[fftw_complex],cint,cuint	fftw3: fftw_plan_dft_3d(input: Tensor[fftw_complex]; output: Tensor[fftw_complex];\n                 sign: cint; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_r2c	fftw3.html#fftw_plan_dft_r2c,cint,ptr.cint,ptr.cdouble,ptr.fftw_complex,cuint	fftw3: fftw_plan_dft_r2c(rank: cint; n: ptr cint; inptr: ptr cdouble;\n                  outptr: ptr fftw_complex; flags: cuint): fftw_plan	
+fftw_plan_dft_r2c	fftw3.html#fftw_plan_dft_r2c,Tensor[float64],Tensor[fftw_complex],cuint	fftw3: fftw_plan_dft_r2c(input: Tensor[float64]; output: Tensor[fftw_complex];\n                  flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_r2c_1d	fftw3.html#fftw_plan_dft_r2c_1d,cint,ptr.cdouble,ptr.fftw_complex,cuint	fftw3: fftw_plan_dft_r2c_1d(n: cint; inptr: ptr cdouble; outptr: ptr fftw_complex;\n                     flags: cuint): fftw_plan	
+fftw_plan_dft_r2c_1d	fftw3.html#fftw_plan_dft_r2c_1d,Tensor[float64],Tensor[fftw_complex],cuint	fftw3: fftw_plan_dft_r2c_1d(input: Tensor[float64]; output: Tensor[fftw_complex];\n                     flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_r2c_2d	fftw3.html#fftw_plan_dft_r2c_2d,cint,cint,ptr.cdouble,ptr.fftw_complex,cuint	fftw3: fftw_plan_dft_r2c_2d(n0: cint; n1: cint; inptr: ptr cdouble;\n                     outptr: ptr fftw_complex; flags: cuint): fftw_plan	
+fftw_plan_dft_r2c_2d	fftw3.html#fftw_plan_dft_r2c_2d,Tensor[float64],Tensor[fftw_complex],cuint	fftw3: fftw_plan_dft_r2c_2d(input: Tensor[float64]; output: Tensor[fftw_complex];\n                     flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_r2c_3d	fftw3.html#fftw_plan_dft_r2c_3d,cint,cint,cint,ptr.cdouble,ptr.fftw_complex,cuint	fftw3: fftw_plan_dft_r2c_3d(n0: cint; n1: cint; n2: cint; inptr: ptr cdouble;\n                     outptr: ptr fftw_complex; flags: cuint): fftw_plan	
+fftw_plan_dft_r2c_3d	fftw3.html#fftw_plan_dft_r2c_3d,Tensor[float64],Tensor[fftw_complex],cuint	fftw3: fftw_plan_dft_r2c_3d(input: Tensor[float64]; output: Tensor[fftw_complex];\n                     flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_c2r	fftw3.html#fftw_plan_dft_c2r,cint,ptr.cint,ptr.fftw_complex,ptr.cdouble,cuint	fftw3: fftw_plan_dft_c2r(rank: cint; n: ptr cint; inptr: ptr fftw_complex;\n                  outptr: ptr cdouble; flags: cuint): fftw_plan	
+fftw_plan_dft_c2r	fftw3.html#fftw_plan_dft_c2r,Tensor[fftw_complex],Tensor[float64],cuint	fftw3: fftw_plan_dft_c2r(input: Tensor[fftw_complex]; output: Tensor[float64];\n                  flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_c2r_1d	fftw3.html#fftw_plan_dft_c2r_1d,cint,ptr.fftw_complex,ptr.cdouble,cuint	fftw3: fftw_plan_dft_c2r_1d(n: cint; inptr: ptr fftw_complex; outptr: ptr cdouble;\n                     flags: cuint): fftw_plan	
+fftw_plan_dft_c2r_1d	fftw3.html#fftw_plan_dft_c2r_1d,Tensor[fftw_complex],Tensor[float64],cuint	fftw3: fftw_plan_dft_c2r_1d(input: Tensor[fftw_complex]; output: Tensor[float64];\n                     flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_c2r_2d	fftw3.html#fftw_plan_dft_c2r_2d,cint,cint,ptr.fftw_complex,ptr.cdouble,cuint	fftw3: fftw_plan_dft_c2r_2d(n0: cint; n1: cint; inptr: ptr fftw_complex;\n                     outptr: ptr cdouble; flags: cuint): fftw_plan	
+fftw_plan_dft_c2r_2d	fftw3.html#fftw_plan_dft_c2r_2d,Tensor[fftw_complex],Tensor[float64],cuint	fftw3: fftw_plan_dft_c2r_2d(input: Tensor[fftw_complex]; output: Tensor[float64];\n                     flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_dft_c2r_3d	fftw3.html#fftw_plan_dft_c2r_3d,cint,cint,cint,ptr.fftw_complex,ptr.cdouble,cuint	fftw3: fftw_plan_dft_c2r_3d(n0: cint; n1: cint; n2: cint; inptr: ptr fftw_complex;\n                     outptr: ptr cdouble; flags: cuint): fftw_plan	
+fftw_plan_dft_c2r_3d	fftw3.html#fftw_plan_dft_c2r_3d,Tensor[fftw_complex],Tensor[float64],cuint	fftw3: fftw_plan_dft_c2r_3d(input: Tensor[fftw_complex]; output: Tensor[float64];\n                     flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_r2r	fftw3.html#fftw_plan_r2r,cint,ptr.cint,ptr.cdouble,ptr.cdouble,ptr.fftw_r2r_kind,cuint	fftw3: fftw_plan_r2r(rank: cint; n: ptr cint; inptr: ptr cdouble; outptr: ptr cdouble;\n              kind: ptr fftw_r2r_kind; flags: cuint): fftw_plan	
+fftw_plan_r2r	fftw3.html#fftw_plan_r2r,Tensor[float64],Tensor[float64],seq[fftw_r2r_kind],cuint	fftw3: fftw_plan_r2r(input: Tensor[float64]; output: Tensor[float64];\n              kinds: seq[fftw_r2r_kind]; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_r2r_1d	fftw3.html#fftw_plan_r2r_1d,cint,ptr.cdouble,ptr.cdouble,fftw_r2r_kind,cuint	fftw3: fftw_plan_r2r_1d(n: cint; inptr: ptr cdouble; outptr: ptr cdouble;\n                 kind: fftw_r2r_kind; flags: cuint): fftw_plan	
+fftw_plan_r2r_1d	fftw3.html#fftw_plan_r2r_1d,Tensor[float64],Tensor[float64],fftw_r2r_kind,cuint	fftw3: fftw_plan_r2r_1d(input: Tensor[float64]; output: Tensor[float64];\n                 kind: fftw_r2r_kind; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_r2r_2d	fftw3.html#fftw_plan_r2r_2d,cint,cint,ptr.cdouble,ptr.cdouble,fftw_r2r_kind,fftw_r2r_kind,cuint	fftw3: fftw_plan_r2r_2d(n0: cint; n1: cint; inptr: ptr cdouble; outptr: ptr cdouble;\n                 kind0: fftw_r2r_kind; kind1: fftw_r2r_kind; flags: cuint): fftw_plan	
+fftw_plan_r2r_2d	fftw3.html#fftw_plan_r2r_2d,Tensor[float64],Tensor[float64],seq[fftw_r2r_kind],cuint	fftw3: fftw_plan_r2r_2d(input: Tensor[float64]; output: Tensor[float64];\n                 kinds: seq[fftw_r2r_kind]; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_r2r_3d	fftw3.html#fftw_plan_r2r_3d,cint,cint,cint,ptr.cdouble,ptr.cdouble,fftw_r2r_kind,fftw_r2r_kind,fftw_r2r_kind,cuint	fftw3: fftw_plan_r2r_3d(n0: cint; n1: cint; n2: cint; inptr: ptr cdouble;\n                 outptr: ptr cdouble; kind0: fftw_r2r_kind;\n                 kind1: fftw_r2r_kind; kind2: fftw_r2r_kind; flags: cuint): fftw_plan	
+fftw_plan_r2r_3d	fftw3.html#fftw_plan_r2r_3d,Tensor[float64],Tensor[float64],seq[fftw_r2r_kind],cuint	fftw3: fftw_plan_r2r_3d(input: Tensor[float64]; output: Tensor[float64];\n                 kinds: seq[fftw_r2r_kind]; flags: cuint = FFTW_MEASURE): fftw_plan	
+fftw_plan_many_dft	fftw3.html#fftw_plan_many_dft,cint,ptr.cint,cint,ptr.fftw_complex,ptr.cint,cint,cint,ptr.fftw_complex,ptr.cint,cint,cint,cint,cuint	fftw3: fftw_plan_many_dft(rank: cint; n: ptr cint; howmany: cint;\n                   inptr: ptr fftw_complex; inembed: ptr cint; istride: cint;\n                   idist: cint; outptr: ptr fftw_complex; onembed: ptr cint;\n                   ostride: cint; odist: cint; sign: cint; flags: cuint): fftw_plan	
+fftw_plan_many_dft_c2r	fftw3.html#fftw_plan_many_dft_c2r,cint,ptr.cint,cint,ptr.fftw_complex,ptr.cint,cint,cint,ptr.cdouble,ptr.cint,cint,cint,cuint	fftw3: fftw_plan_many_dft_c2r(rank: cint; n: ptr cint; howmany: cint;\n                       inptr: ptr fftw_complex; inembed: ptr cint;\n                       istride: cint; idist: cint; outptr: ptr cdouble;\n                       onembed: ptr cint; ostride: cint; odist: cint;\n                       flags: cuint): fftw_plan	
+fftw_plan_many_dft_r2c	fftw3.html#fftw_plan_many_dft_r2c,cint,ptr.cint,cint,ptr.cdouble,ptr.cint,cint,cint,ptr.fftw_complex,ptr.cint,cint,cint,cuint	fftw3: fftw_plan_many_dft_r2c(rank: cint; n: ptr cint; howmany: cint;\n                       inptr: ptr cdouble; inembed: ptr cint; istride: cint;\n                       idist: cint; outptr: ptr fftw_complex; onembed: ptr cint;\n                       ostride: cint; odist: cint; flags: cuint): fftw_plan	
+fftw_plan_many_r2r	fftw3.html#fftw_plan_many_r2r,cint,ptr.cint,cint,ptr.cdouble,ptr.cint,cint,cint,ptr.cdouble,ptr.cint,cint,cint,ptr.fftw_r2r_kind,cuint	fftw3: fftw_plan_many_r2r(rank: cint; n: ptr cint; howmany: cint; inptr: ptr cdouble;\n                   inembed: ptr cint; istride: cint; idist: cint;\n                   outptr: ptr cdouble; onembed: ptr cint; ostride: cint;\n                   odist: cint; kind: ptr fftw_r2r_kind; flags: cuint): fftw_plan	
+fftw_destroy_plan	fftw3.html#fftw_destroy_plan,fftw_plan	fftw3: fftw_destroy_plan(p: fftw_plan)	
+fftw_cleanup	fftw3.html#fftw_cleanup	fftw3: fftw_cleanup()	
+fftw_set_timelimit	fftw3.html#fftw_set_timelimit,cdouble	fftw3: fftw_set_timelimit(t: cdouble)	

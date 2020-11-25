@@ -3,6 +3,7 @@ Nim bindings to the FFTW3 library, to compute Fourier transforms of various kind
 # Installation
 
 Use nimble `nimble install fftw3` to install the latest released version
+To generate the documentation locally use ``nimble htmldoc``
 
 # Usage
 
