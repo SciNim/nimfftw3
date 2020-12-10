@@ -537,19 +537,19 @@ Generic Circshift
 <dt><pre><span class="Keyword">proc</span> <a href="#fftshift%2CTensor%5BT%5D"><span class="Identifier">fftshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 
-Common fftshift function
+Common fftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
 </span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
 </span><span class="Comment"># output_tensor is the fftshift of input_tensor</span><span class="Whitespace">
-</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">output_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">fftshift</span><span class="Punctuation">(</span><span class="Identifier">input_tensor</span><span class="Punctuation">)</span></pre>Calculate fftshift using circshift
+</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">output_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">fftshift</span><span class="Punctuation">(</span><span class="Identifier">input_tensor</span><span class="Punctuation">)</span></pre>
 
 </dd>
 <a id="ifftshift,Tensor[T]"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#ifftshift%2CTensor%5BT%5D"><span class="Identifier">ifftshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 
-Common ifftshift function
+Common ifftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
 </span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
@@ -658,7 +658,9 @@ Execute a complex-to-real plan on new Tensor
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag. Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
+<p>Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.</p>
+<p>Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.</p>
+
 
 </dd>
 <a id="fftw_plan_dft_1d,cint,ptr.Complex64,ptr.Complex64,cint,cuint"></a>
@@ -730,7 +732,9 @@ Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag. Read 
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag. Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
+<p>Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.</p>
+<p>Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.</p>
+
 
 </dd>
 <a id="fftw_plan_dft_r2c_1d,cint,ptr.cdouble,ptr.Complex64,cuint"></a>
@@ -941,7 +945,10 @@ Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fft
     <span class="Identifier">cdecl</span><span class="Other">,</span> <span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;fftw_plan_many_dft&quot;</span><span class="Other">,</span> <span class="Identifier">dynlib</span><span class="Other">:</span> <span class="Identifier">Fftw3Lib</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Plan mutliple multidimensionnal complex DFTs and extend <tt class="docutils literal"><span class="pre">fftw_plan_dft</span></tt> to compute howmany transforms, each having rank rank and size n. <tt class="docutils literal"><span class="pre">howmany</span></tt> is the (nonnegative) number of transforms to compute. The resulting plan computes howmany transforms, where the input of the k-th transform is at location in+k*idist (in C pointer arithmetic), and its output is at location out+k*odist. Plans obtained in this way can often be faster than calling FFTW multiple times for the individual transforms. The basic fftw_plan_dft interface corresponds to howmany=1 (in which case the dist parameters are ignored).
+<p>Plan mutliple multidimensionnal complex DFTs and extend <tt class="docutils literal"><span class="pre">fftw_plan_dft</span></tt> to compute howmany transforms, each having rank rank and size n.</p>
+<p><tt class="docutils literal"><span class="pre">howmany</span></tt> is the (nonnegative) number of transforms to compute. The resulting plan computes howmany transforms, where the input of the k-th transform is at location in+k*idist (in C pointer arithmetic), and its output is at location out+k*odist.</p>
+<p>Plans obtained in this way can often be faster than calling FFTW multiple times for the individual transforms. The basic fftw_plan_dft interface corresponds to howmany=1 (in which case the dist parameters are ignored).</p>
+
 
 </dd>
 <a id="fftw_plan_many_dft_c2r,cint,ptr.cint,cint,ptr.Complex64,ptr.cint,cint,cint,ptr.cdouble,ptr.cint,cint,cint,cuint"></a>
@@ -1018,7 +1025,7 @@ All existing plans become undefined, and you should not attempt to execute them 
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-12-10 15:49:04 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-12-10 16:50:09 UTC</small>
       </div>
     </div>
   </div>

@@ -154,21 +154,21 @@ proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T] =
     result = circshift_impl(t, shift)
 
 proc fftshift*[T](t: Tensor[T]): Tensor[T] =
-  ## Common fftshift function
+  ## Common fftshift function. Use Nim's openMP operator (`||`) for rank <= 3
   runnableExamples:
     import arraymancer
     let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
     # output_tensor is the fftshift of input_tensor
     var output_tensor = fftshift(input_tensor)
 
-  ## Calculate fftshift using circshift
+  # Calculate fftshift using circshift
   let xshift = t.shape[0] div 2
   let yshift = t.shape[1] div 2
   let zshift = t.shape[2] div 2
   result = circshift(t, @[xshift.int, yshift.int, zshift.int])
 
 proc ifftshift*[T](t: Tensor[T]): Tensor[T] =
-  ## Common ifftshift function
+  ## Common ifftshift function. Use Nim's openMP operator (`||`) for rank <= 3
   runnableExamples:
     import arraymancer
     let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
@@ -242,6 +242,7 @@ proc fftw_plan_dft*(rank: cint, n: ptr cint, inptr: ptr Complex64,
 proc fftw_plan_dft*(input: Tensor[Complex64], output: Tensor[Complex64], sign: cint,
         flags: cuint = FFTW_MEASURE): fftw_plan =
   ## Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  ##
   ## Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
   let shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
   result = fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.get_data_ptr, output.get_data_ptr, sign, flags)
@@ -285,6 +286,7 @@ proc fftw_plan_dft_r2c*(rank: cint, n: ptr cint, inptr: ptr cdouble,
 
 proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[Complex64], flags: cuint = FFTW_MEASURE): fftw_plan =
   ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+  ##
   ## Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
   let shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
   result = fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), cast[ptr cdouble](input.get_data_ptr),
@@ -426,7 +428,9 @@ proc fftw_plan_many_dft*(rank: cint, n: ptr cint, howmany: cint,
                          sign: cint, flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_many_dft", dynlib: Fftw3Lib.}
     ## Plan mutliple multidimensionnal complex DFTs and extend ``fftw_plan_dft`` to compute howmany transforms, each having rank rank and size n.
+    ##
     ## ``howmany`` is the (nonnegative) number of transforms to compute. The resulting plan computes howmany transforms, where the input of the k-th transform is at location in+k*idist (in C pointer arithmetic), and its output is at location out+k*odist.
+    ##
     ## Plans obtained in this way can often be faster than calling FFTW multiple times for the individual transforms. The basic fftw_plan_dft interface corresponds to howmany=1 (in which case the dist parameters are ignored).
 
 proc fftw_plan_many_dft_c2r*(rank: cint, n: ptr cint, howmany: cint,
@@ -458,5 +462,4 @@ proc fftw_cleanup*() {.cdecl, importc: "fftw_cleanup", dynlib: Fftw3Lib.}
   ## All existing plans become undefined, and you should not attempt to execute them nor to destroy them. You can however create and execute/destroy new plans, in which case FFTW starts accumulating wisdom information again.
 
 proc fftw_set_timelimit*(t: cdouble) {.cdecl, importc: "fftw_set_timelimit", dynlib: Fftw3Lib.}
-
 
