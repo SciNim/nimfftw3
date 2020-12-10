@@ -98,27 +98,27 @@ function main() {
     title="fftw_r2r_kind = enum
   FFTW_R2HC = 0, FFTW_HC2R = 1, FFTW_DHT = 2, FFTW_REDFT00 = 3,
   FFTW_REDFT01 = 4, FFTW_REDFT10 = 5, FFTW_REDFT11 = 6, FFTW_RODFT00 = 7,
-  FFTW_RODFT01 = 8, FFTW_RODFT10 = 9, FFTW_RODFT11 = 10"><wbr />fftw_<wbr />r2r_<wbr />kind<span class="attachedType"></span></a></li>
+  FFTW_RODFT01 = 8, FFTW_RODFT10 = 9, FFTW_RODFT11 = 10">fftw_r2r_kind</a></li>
   <li><a class="reference" href="#fftw_iodim"
     title="fftw_iodim {.pure.} = object
   n*: cint
   `is`*: cint
-  os*: cint"><wbr />fftw_<wbr />iodim<span class="attachedType"></span></a></li>
+  os*: cint">fftw_iodim</a></li>
   <li><a class="reference" href="#ptrdiff_t"
-    title="ptrdiff_t = clong"><wbr />ptrdiff_<wbr />t<span class="attachedType"></span></a></li>
+    title="ptrdiff_t = clong">ptrdiff_t</a></li>
   <li><a class="reference" href="#wchar_t"
-    title="wchar_t = cint"><wbr />wchar_<wbr />t<span class="attachedType"></span></a></li>
+    title="wchar_t = cint">wchar_t</a></li>
   <li><a class="reference" href="#fftw_iodim64"
     title="fftw_iodim64 {.pure.} = object
   n*: ptrdiff_t
   `is`*: ptrdiff_t
-  os*: ptrdiff_t"><wbr />fftw_<wbr />iodim64<span class="attachedType"></span></a></li>
+  os*: ptrdiff_t">fftw_iodim64</a></li>
   <li><a class="reference" href="#fftw_write_char_func"
-    title="fftw_write_char_func = proc (c: char; a3: pointer) {.cdecl.}"><wbr />fftw_<wbr />write_<wbr />char_<wbr />func<span class="attachedType"></span></a></li>
+    title="fftw_write_char_func = proc (c: char; a3: pointer) {.cdecl.}">fftw_write_char_func</a></li>
   <li><a class="reference" href="#fftw_read_char_func"
-    title="fftw_read_char_func = proc (a2: pointer): cint {.cdecl.}"><wbr />fftw_<wbr />read_<wbr />char_<wbr />func<span class="attachedType"></span></a></li>
+    title="fftw_read_char_func = proc (a2: pointer): cint {.cdecl.}">fftw_read_char_func</a></li>
   <li><a class="reference" href="#fftw_plan"
-    title="fftw_plan = pointer"><wbr />fftw_<wbr />plan<span class="attachedType"></span></a></li>
+    title="fftw_plan = pointer">fftw_plan</a></li>
 
   </ul>
 </li>
@@ -126,9 +126,9 @@ function main() {
   <a class="reference reference-toplevel" href="#8" id="58">Vars</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#fftw_cc"
-    title="fftw_cc: cstring"><wbr />fftw_<wbr />cc<span class="attachedType"></span></a></li>
+    title="fftw_cc: cstring">fftw_cc</a></li>
   <li><a class="reference" href="#fftw_codelet_optim"
-    title="fftw_codelet_optim: cstring"><wbr />fftw_<wbr />codelet_<wbr />optim<span class="attachedType"></span></a></li>
+    title="fftw_codelet_optim: cstring">fftw_codelet_optim</a></li>
 
   </ul>
 </li>
@@ -136,7 +136,7 @@ function main() {
   <a class="reference reference-toplevel" href="#9" id="59">Lets</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#fftw_version"
-    title="fftw_version: cstring"><wbr />fftw_<wbr />version<span class="attachedType"></span></a></li>
+    title="fftw_version: cstring">fftw_version</a></li>
 
   </ul>
 </li>
@@ -144,7 +144,7 @@ function main() {
   <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#Fftw3Lib"
-    title="Fftw3Lib = &quot;libfftw3.so&quot;"><wbr />Fftw3Lib<span class="attachedType"></span></a></li>
+    title="Fftw3Lib = &quot;libfftw3.so&quot;">Fftw3Lib</a></li>
 
   </ul>
 </li>
@@ -153,57 +153,57 @@ function main() {
   <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">fftw_cost
       <li><a class="reference" href="#fftw_cost%2Cfftw_plan"
-    title="fftw_cost(p: fftw_plan): cdouble">fftw_cost,fftw_plan<span class="attachedType">fftw_plan</span></a></li>
+    title="fftw_cost(p: fftw_plan): cdouble">fftw_cost,<wbr>fftw_plan</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_estimate_cost
       <li><a class="reference" href="#fftw_estimate_cost%2Cfftw_plan"
-    title="fftw_estimate_cost(p: fftw_plan): cdouble">fftw_estimate_cost,fftw_plan<span class="attachedType">fftw_plan</span></a></li>
+    title="fftw_estimate_cost(p: fftw_plan): cdouble">fftw_estimate_cost,<wbr>fftw_plan</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_alloc_real
       <li><a class="reference" href="#fftw_alloc_real%2Ccsize_t"
-    title="fftw_alloc_real(n: csize_t): ptr cdouble">fftw_alloc_real,csize_t<span class="attachedType"></span></a></li>
+    title="fftw_alloc_real(n: csize_t): ptr cdouble">fftw_alloc_real,<wbr>csize_t</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_malloc
       <li><a class="reference" href="#fftw_malloc%2Ccsize_t"
-    title="fftw_malloc(n: csize_t): pointer">fftw_malloc,csize_t<span class="attachedType"></span></a></li>
+    title="fftw_malloc(n: csize_t): pointer">fftw_malloc,<wbr>csize_t</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_alloc_complex
       <li><a class="reference" href="#fftw_alloc_complex%2Ccsize_t"
-    title="fftw_alloc_complex(n: csize_t): ptr fftw_complex">fftw_alloc_complex,csize_t<span class="attachedType"></span></a></li>
+    title="fftw_alloc_complex(n: csize_t): ptr fftw_complex">fftw_alloc_complex,<wbr>csize_t</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_fprint_plan
       <li><a class="reference" href="#fftw_fprint_plan%2Cfftw_plan%2Cptr.File"
-    title="fftw_fprint_plan(p: fftw_plan; output_file: ptr File)">fftw_fprint_plan,fftw_plan,ptr.File<span class="attachedType">fftw_plan</span></a></li>
+    title="fftw_fprint_plan(p: fftw_plan; output_file: ptr File)">fftw_fprint_plan,<wbr>fftw_plan,<wbr>ptr.File</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_sprint_plan
       <li><a class="reference" href="#fftw_sprint_plan%2Cfftw_plan"
-    title="fftw_sprint_plan(p: fftw_plan): cstring">fftw_sprint_plan,fftw_plan<span class="attachedType">fftw_plan</span></a></li>
+    title="fftw_sprint_plan(p: fftw_plan): cstring">fftw_sprint_plan,<wbr>fftw_plan</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_flops
       <li><a class="reference" href="#fftw_flops%2Cfftw_plan%2Cptr.cdouble%2Cptr.cdouble%2Cptr.cdouble"
-    title="fftw_flops(p: fftw_plan; add: ptr cdouble; mul: ptr cdouble; fmas: ptr cdouble)">fftw_flops,fftw_plan,ptr.cdouble,ptr.cdouble,ptr.cdouble<span class="attachedType">fftw_plan</span></a></li>
+    title="fftw_flops(p: fftw_plan; add: ptr cdouble; mul: ptr cdouble; fmas: ptr cdouble)">fftw_flops,<wbr>fftw_plan,<wbr>ptr.cdouble,<wbr>ptr.cdouble,<wbr>ptr.cdouble</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_alignment_of
       <li><a class="reference" href="#fftw_alignment_of%2Cptr.cdouble"
-    title="fftw_alignment_of(p: ptr cdouble): cint">fftw_alignment_of,ptr.cdouble<span class="attachedType"></span></a></li>
+    title="fftw_alignment_of(p: ptr cdouble): cint">fftw_alignment_of,<wbr>ptr.cdouble</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_free
       <li><a class="reference" href="#fftw_free%2Cpointer"
-    title="fftw_free(p: pointer)">fftw_free,pointer<span class="attachedType"></span></a></li>
+    title="fftw_free(p: pointer)">fftw_free,<wbr>pointer</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_print_plan
       <li><a class="reference" href="#fftw_print_plan%2Cfftw_plan"
-    title="fftw_print_plan(p: fftw_plan)">fftw_print_plan,fftw_plan<span class="attachedType">fftw_plan</span></a></li>
+    title="fftw_print_plan(p: fftw_plan)">fftw_print_plan,<wbr>fftw_plan</a></li>
 
   </ul>
 
@@ -433,7 +433,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-11-25 11:31:13 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-12-10 16:50:07 UTC</small>
       </div>
     </div>
   </div>
