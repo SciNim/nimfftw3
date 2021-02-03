@@ -158,11 +158,6 @@ function main() {
                      output: Tensor[float64])">fftw_execute_dft_c2r,<wbr>fftw_plan,<wbr>Tensor[Complex64],<wbr>Tensor[float64]</a></li>
 
   </ul>
-  <ul class="simple nested-toc-section">circshift
-      <li><a class="reference" href="#circshift%2CTensor%5BT%5D%2Cseq%5Bint%5D"
-    title="circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]">circshift,<wbr>Tensor[T],<wbr>seq[int]</a></li>
-
-  </ul>
   <ul class="simple nested-toc-section">fftw_plan_many_dft_r2c
       <li><a class="reference" href="#fftw_plan_many_dft_r2c%2Ccint%2Cptr.cint%2Ccint%2Cptr.cdouble%2Cptr.cint%2Ccint%2Ccint%2Cptr.Complex64%2Cptr.cint%2Ccint%2Ccint%2Ccuint"
     title="fftw_plan_many_dft_r2c(rank: cint; n: ptr cint; howmany: cint;
@@ -183,11 +178,6 @@ function main() {
   <li><a class="reference" href="#fftw_plan_dft_2d%2CTensor%5BComplex64%5D%2CTensor%5BComplex64%5D%2Ccint%2Ccuint"
     title="fftw_plan_dft_2d(input: Tensor[Complex64]; output: Tensor[Complex64];
                  sign: cint; flags: cuint = FFTW_MEASURE): fftw_plan">fftw_plan_dft_2d,<wbr>Tensor[Complex64],<wbr>Tensor[Complex64],<wbr>cint,<wbr>cuint</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">ifftshift
-      <li><a class="reference" href="#ifftshift%2CTensor%5BT%5D"
-    title="ifftshift[T](t: Tensor[T]): Tensor[T]">ifftshift,<wbr>Tensor[T]</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_execute_dft
@@ -249,11 +239,6 @@ function main() {
   <li><a class="reference" href="#fftw_plan_dft_r2c%2CTensor%5Bfloat64%5D%2CTensor%5BComplex64%5D%2Ccuint"
     title="fftw_plan_dft_r2c(input: Tensor[float64]; output: Tensor[Complex64];
                   flags: cuint = FFTW_MEASURE): fftw_plan">fftw_plan_dft_r2c,<wbr>Tensor[float64],<wbr>Tensor[Complex64],<wbr>cuint</a></li>
-
-  </ul>
-  <ul class="simple nested-toc-section">fftshift
-      <li><a class="reference" href="#fftshift%2CTensor%5BT%5D"
-    title="fftshift[T](t: Tensor[T]): Tensor[T]">fftshift,<wbr>Tensor[T]</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">fftw_plan_dft_3d
@@ -419,7 +404,7 @@ function main() {
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="fftw3/libutils.html">fftw3/libutils</a>, <a class="reference external" href="fftw3/guru.html">fftw3/guru</a>, <a class="reference external" href="fftw3/wisdom.html">fftw3/wisdom</a>
+<a class="reference external" href="fftw3/libutils.html">fftw3/libutils</a>, <a class="reference external" href="fftw3/guru.html">fftw3/guru</a>, <a class="reference external" href="fftw3/wisdom.html">fftw3/wisdom</a>, <a class="reference external" href="fftw3/fftshift.html">fftw3/fftshift</a>
 </dl></div>
 <div class="section" id="10">
 <h1><a class="toc-backref" href="#10">Consts</a></h1>
@@ -526,37 +511,6 @@ function main() {
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<a id="circshift,Tensor[T],seq[int]"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#circshift%2CTensor%5BT%5D%2Cseq%5Bint%5D"><span class="Identifier">circshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">shift</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
-<dd>
-
-Generic Circshift
-
-</dd>
-<a id="fftshift,Tensor[T]"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fftshift%2CTensor%5BT%5D"><span class="Identifier">fftshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
-<dd>
-
-Common fftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3
-<p><strong class="examples_text">Example:</strong></p>
-<pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
-</span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
-</span><span class="Comment"># output_tensor is the fftshift of input_tensor</span><span class="Whitespace">
-</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">output_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">fftshift</span><span class="Punctuation">(</span><span class="Identifier">input_tensor</span><span class="Punctuation">)</span></pre>
-
-</dd>
-<a id="ifftshift,Tensor[T]"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#ifftshift%2CTensor%5BT%5D"><span class="Identifier">ifftshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
-<dd>
-
-Common ifftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3
-<p><strong class="examples_text">Example:</strong></p>
-<pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
-</span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
-</span><span class="Comment"># output_tensor is the fftshift of input_tensor</span><span class="Whitespace">
-</span><span class="Keyword">var</span><span class="Whitespace"> </span><span class="Identifier">output_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">ifftshift</span><span class="Punctuation">(</span><span class="Identifier">input_tensor</span><span class="Punctuation">)</span></pre>
-
-</dd>
 <a id="fftw_execute,fftw_plan"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#fftw_execute%2Cfftw_plan"><span class="Identifier">fftw_execute</span></a><span class="Other">(</span><span class="Identifier">p</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">cdecl</span><span class="Other">,</span> <span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;fftw_execute&quot;</span><span class="Other">,</span>
                                   <span class="Identifier">dynlib</span><span class="Other">:</span> <span class="Identifier">Fftw3Lib</span></span><span class="Other">.}</span></span></pre></dt>
@@ -1015,7 +969,7 @@ All existing plans become undefined, and you should not attempt to execute them 
 <div class="section" id="19">
 <h1><a class="toc-backref" href="#19">Exports</a></h1>
 <dl class="item">
-<a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a>, <a href="fftw3/libutils.html#fftw_r2r_kind"><span class="Identifier">fftw_r2r_kind</span></a>
+<a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a>, <a href="fftw3/libutils.html#fftw_r2r_kind"><span class="Identifier">fftw_r2r_kind</span></a>, <a href="fftw3/fftshift.html#ifftshift,Tensor[T]"><span class="Identifier">ifftshift</span></a>, <a href="fftw3/fftshift.html#fftshift,Tensor[T]"><span class="Identifier">fftshift</span></a>, <a href="fftw3/fftshift.html#circshift,Tensor[T],seq[int]"><span class="Identifier">circshift</span></a>
 </dl></div>
 
   </div>
@@ -1025,7 +979,7 @@ All existing plans become undefined, and you should not attempt to execute them 
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-12-10 16:50:09 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-02-03 11:12:49 UTC</small>
       </div>
     </div>
   </div>
