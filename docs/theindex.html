@@ -63,14 +63,14 @@ function main() {
 <div class="document" id="documentId">
   <div class="container">
     <h1 class="title">Index</h1>
-    Modules: <a href="fftw3.html">fftw3</a>, <a href="fftw3/guru.html">fftw3/guru</a>, <a href="fftw3/libutils.html">fftw3/libutils</a>, <a href="fftw3/wisdom.html">fftw3/wisdom</a>.<br/><p /><h2>API symbols</h2>
+    Modules: <a href="fftw3.html">fftw3</a>, <a href="fftw3/fftshift.html">fftw3/fftshift</a>, <a href="fftw3/guru.html">fftw3/guru</a>, <a href="fftw3/libutils.html">fftw3/libutils</a>, <a href="fftw3/wisdom.html">fftw3/wisdom</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="circshift" href="#circshift"><span>circshift:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="fftw3: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]" href="fftw3.html#circshift%2CTensor%5BT%5D%2Cseq%5Bint%5D">fftw3: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]</a></li>
+          data-doc-search-tag="fftshift: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]" href="fftw3/fftshift.html#circshift%2CTensor%5BT%5D%2Cseq%5Bint%5D">fftshift: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]</a></li>
           </ul></dd>
 <dt><a name="fftshift" href="#fftshift"><span>fftshift:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="fftw3: fftshift[T](t: Tensor[T]): Tensor[T]" href="fftw3.html#fftshift%2CTensor%5BT%5D">fftw3: fftshift[T](t: Tensor[T]): Tensor[T]</a></li>
+          data-doc-search-tag="fftshift: fftshift[T](t: Tensor[T]): Tensor[T]" href="fftw3/fftshift.html#fftshift%2CTensor%5BT%5D">fftshift: fftshift[T](t: Tensor[T]): Tensor[T]</a></li>
           </ul></dd>
 <dt><a name="Fftw3Lib" href="#Fftw3Lib"><span>Fftw3Lib:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -676,9 +676,33 @@ function main() {
 <li><a class="reference external"
           data-doc-search-tag="libutils: fftw_write_char_func" href="fftw3/libutils.html#fftw_write_char_func">libutils: fftw_write_char_func</a></li>
           </ul></dd>
+<dt><a name="get2DCoord" href="#get2DCoord"><span>get2DCoord:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="fftshift: get2DCoord(index: int; Nx, Ny: int): array[2, int]" href="fftw3/fftshift.html#get2DCoord%2Cint%2Cint%2Cint">fftshift: get2DCoord(index: int; Nx, Ny: int): array[2, int]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="fftshift: get2DCoord[T](index: int; t: Tensor[T]): array[2, int]" href="fftw3/fftshift.html#get2DCoord%2Cint%2CTensor%5BT%5D">fftshift: get2DCoord[T](index: int; t: Tensor[T]): array[2, int]</a></li>
+          </ul></dd>
+<dt><a name="get3DCoord" href="#get3DCoord"><span>get3DCoord:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="fftshift: get3DCoord(index: int; Nx, Ny, Nz: int): array[3, int]" href="fftw3/fftshift.html#get3DCoord%2Cint%2Cint%2Cint%2Cint">fftshift: get3DCoord(index: int; Nx, Ny, Nz: int): array[3, int]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="fftshift: get3DCoord[T](index: int; t: Tensor[T]): array[3, int]" href="fftw3/fftshift.html#get3DCoord%2Cint%2CTensor%5BT%5D">fftshift: get3DCoord[T](index: int; t: Tensor[T]): array[3, int]</a></li>
+          </ul></dd>
+<dt><a name="I" href="#I"><span>I:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="fftshift: I(coord: openArray[int]): int" href="fftw3/fftshift.html#I%2CopenArray%5Bint%5D">fftshift: I(coord: openArray[int]): int</a></li>
+          </ul></dd>
 <dt><a name="ifftshift" href="#ifftshift"><span>ifftshift:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="fftw3: ifftshift[T](t: Tensor[T]): Tensor[T]" href="fftw3.html#ifftshift%2CTensor%5BT%5D">fftw3: ifftshift[T](t: Tensor[T]): Tensor[T]</a></li>
+          data-doc-search-tag="fftshift: ifftshift[T](t: Tensor[T]): Tensor[T]" href="fftw3/fftshift.html#ifftshift%2CTensor%5BT%5D">fftshift: ifftshift[T](t: Tensor[T]): Tensor[T]</a></li>
+          </ul></dd>
+<dt><a name="J" href="#J"><span>J:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="fftshift: J(coord: openArray[int]): int" href="fftw3/fftshift.html#J%2CopenArray%5Bint%5D">fftshift: J(coord: openArray[int]): int</a></li>
+          </ul></dd>
+<dt><a name="K" href="#K"><span>K:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="fftshift: K(coord: openArray[int]): int" href="fftw3/fftshift.html#K%2CopenArray%5Bint%5D">fftshift: K(coord: openArray[int]): int</a></li>
           </ul></dd>
 <dt><a name="ptrdiff_t" href="#ptrdiff_t"><span>ptrdiff_t:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -693,7 +717,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-12-10 16:50:09 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-02-03 11:06:17 UTC</small>
       </div>
     </div>
   </div>

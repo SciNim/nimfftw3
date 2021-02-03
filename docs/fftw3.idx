@@ -14,9 +14,6 @@ FFTW_UNALIGNED	fftw3.html#FFTW_UNALIGNED	fftw3: FFTW_UNALIGNED
 FFTW_CONSERVE_MEMORY	fftw3.html#FFTW_CONSERVE_MEMORY	fftw3: FFTW_CONSERVE_MEMORY	
 FFTW_FORWARD	fftw3.html#FFTW_FORWARD	fftw3: FFTW_FORWARD	
 FFTW_BACKWARD	fftw3.html#FFTW_BACKWARD	fftw3: FFTW_BACKWARD	
-circshift	fftw3.html#circshift,Tensor[T],seq[int]	fftw3: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]	
-fftshift	fftw3.html#fftshift,Tensor[T]	fftw3: fftshift[T](t: Tensor[T]): Tensor[T]	
-ifftshift	fftw3.html#ifftshift,Tensor[T]	fftw3: ifftshift[T](t: Tensor[T]): Tensor[T]	
 fftw_execute	fftw3.html#fftw_execute,fftw_plan	fftw3: fftw_execute(p: fftw_plan)	
 fftw_execute_dft	fftw3.html#fftw_execute_dft,fftw_plan,ptr.Complex64,ptr.Complex64	fftw3: fftw_execute_dft(p: fftw_plan; inptr: ptr Complex64; outptr: ptr Complex64)	
 fftw_execute_dft	fftw3.html#fftw_execute_dft,fftw_plan,Tensor[Complex64],Tensor[Complex64]	fftw3: fftw_execute_dft(p: fftw_plan; input: Tensor[Complex64];\n                 output: Tensor[Complex64])	
