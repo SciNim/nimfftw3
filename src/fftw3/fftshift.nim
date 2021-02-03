@@ -1,15 +1,14 @@
 import arraymancer
 import arraymancer/tensor/private/p_accessors
-
 import sequtils
 
-proc get2DCoord*(index: int, Nx, Ny: int): array[2, int] {.inline.} =
+proc get2DCoord(index: int, Nx, Ny: int): array[2, int] {.inline.} =
   var index = index
   result[0] = index div Ny
   index = index - result[0]*Ny
   result[1] = index
 
-proc get3DCoord*(index: int, Nx, Ny, Nz: int): array[3, int] {.inline.} =
+proc get3DCoord(index: int, Nx, Ny, Nz: int): array[3, int] {.inline.} =
   var index = index
   result[0] = index div (Nz*Ny)
   index = index - result[0]*Nz*Ny
@@ -17,26 +16,26 @@ proc get3DCoord*(index: int, Nx, Ny, Nz: int): array[3, int] {.inline.} =
   index = index - result[1]*Nz
   result[2] = index
 
-proc get2DCoord*[T](index: int, t: Tensor[T]): array[2, int] {.inline.} =
+proc get2DCoord[T](index: int, t: Tensor[T]): array[2, int] {.inline.} =
   doAssert t.rank == 2
   let Nx = t.shape[0]
   let Ny = t.shape[1]
   result = get2DCoord(index, Nx, Ny)
 
-proc get3DCoord*[T](index: int, t: Tensor[T]): array[3, int] {.inline.} =
+proc get3DCoord[T](index: int, t: Tensor[T]): array[3, int] {.inline.} =
   doAssert t.rank == 3
   let Nx = t.shape[0]
   let Ny = t.shape[1]
   let Nz = t.shape[2]
   result = get3DCoord(index, Nx, Ny, Nz)
 
-proc I*(coord: openArray[int]): int {.inline.} =
+proc I(coord: openArray[int]): int {.inline.} =
   return coord[0]
 
-proc J*(coord: openArray[int]): int {.inline.} =
+proc J(coord: openArray[int]): int {.inline.} =
   return coord[1]
 
-proc K*(coord: openArray[int]): int {.inline.} =
+proc K(coord: openArray[int]): int {.inline.} =
   return coord[2]
 
 # FFT Shift
@@ -55,14 +54,6 @@ proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int, zshift: int): Ten
       kk = (coord.K + xshift) mod X
     result[ii, jj, kk] = t[coord.I, coord.J, coord.K]
 
-  # for i in 0||(X-1):
-  #   var ii = (i + xshift) mod X
-  #   for j in 0||(Y-1):
-  #     var jj = (j + yshift) mod Y
-  #     for k in 0||(Z-1):
-  #       var kk = (k + zshift) mod Z
-  #       result[ii, jj, kk] = t[i, j, k]
-
 proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int): Tensor[T] =
   assert(t.rank == 2)
   let
@@ -75,12 +66,6 @@ proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int): Tensor[T] =
       ii = (coord.I + xshift) mod X
       jj = (coord.J + xshift) mod X
     result[ii, jj] = t[coord.I, coord.J]
-
-  # for i in 0||(X-1):
-  #   var ii = (i + xshift) mod X
-  #   for j in 0||(Y-1):
-  #     var jj = (j + yshift) mod Y
-  #     result[ii, jj] = t[i, j]
 
 proc circshift_impl[T](t: Tensor[T], xshift: int): Tensor[T] =
   assert(t.rank == 1)

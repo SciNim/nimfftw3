@@ -1,10 +1,3 @@
-get2DCoord	fftw3/fftshift.html#get2DCoord,int,int,int	fftshift: get2DCoord(index: int; Nx, Ny: int): array[2, int]	
-get3DCoord	fftw3/fftshift.html#get3DCoord,int,int,int,int	fftshift: get3DCoord(index: int; Nx, Ny, Nz: int): array[3, int]	
-get2DCoord	fftw3/fftshift.html#get2DCoord,int,Tensor[T]	fftshift: get2DCoord[T](index: int; t: Tensor[T]): array[2, int]	
-get3DCoord	fftw3/fftshift.html#get3DCoord,int,Tensor[T]	fftshift: get3DCoord[T](index: int; t: Tensor[T]): array[3, int]	
-I	fftw3/fftshift.html#I,openArray[int]	fftshift: I(coord: openArray[int]): int	
-J	fftw3/fftshift.html#J,openArray[int]	fftshift: J(coord: openArray[int]): int	
-K	fftw3/fftshift.html#K,openArray[int]	fftshift: K(coord: openArray[int]): int	
 circshift	fftw3/fftshift.html#circshift,Tensor[T],seq[int]	fftshift: circshift[T](t: Tensor[T]; shift: seq[int]): Tensor[T]	
 fftshift	fftw3/fftshift.html#fftshift,Tensor[T]	fftshift: fftshift[T](t: Tensor[T]): Tensor[T]	
 ifftshift	fftw3/fftshift.html#ifftshift,Tensor[T]	fftshift: ifftshift[T](t: Tensor[T]): Tensor[T]	
