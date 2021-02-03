@@ -50,8 +50,8 @@ proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int, zshift: int): Ten
     let
       coord = idx.get3DCoord(result)
       ii = (coord.I + xshift) mod X
-      jj = (coord.J + xshift) mod Y
-      kk = (coord.K + xshift) mod Z
+      jj = (coord.J + yshift) mod Y
+      kk = (coord.K + zshift) mod Z
     result[ii, jj, kk] = t[coord.I, coord.J, coord.K]
 
 proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int): Tensor[T] =
@@ -64,7 +64,7 @@ proc circshift_impl[T](t: Tensor[T], xshift: int, yshift: int): Tensor[T] =
     let
       coord = idx.get2DCoord(result)
       ii = (coord.I + xshift) mod X
-      jj = (coord.J + xshift) mod Y
+      jj = (coord.J + yshift) mod Y
     result[ii, jj] = t[coord.I, coord.J]
 
 proc circshift_impl[T](t: Tensor[T], xshift: int): Tensor[T] =
