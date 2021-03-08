@@ -7,7 +7,7 @@ To generate the documentation locally use ``nimble doc --project src/fftw3.nim -
 
 # Usage
 
-Read the documentation here with the complete API and examples : https://clonkk.github.io/nimfftw3/
+Read the documentation here with the complete API and examples : https://scinim.github.io/nimfftw3/
 
 If you don't know how to use FFTW, read the official FFTW's documentation : http://www.fftw.org/fftw3_doc/
 
