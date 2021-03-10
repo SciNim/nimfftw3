@@ -1,6 +1,7 @@
 import arraymancer
 import arraymancer/tensor/private/p_accessors
 import sequtils
+import sugar
 
 proc get2DCoord(index: int, Nx, Ny: int): array[2, int] {.inline.} =
   var index = index
@@ -88,7 +89,7 @@ proc circshift_impl[T](t: Tensor[T], shift: seq[int]): Tensor[T] =
 
 proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T] =
   ## Generic Circshift
-  assert(t.rank == shift.len)
+  # assert(t.rank == shift.len)
   case t.rank
   of 1:
     result = circshift_impl(t, shift[0])
@@ -108,10 +109,12 @@ proc fftshift*[T](t: Tensor[T]): Tensor[T] =
     var output_tensor = fftshift(input_tensor)
 
   # Calculate fftshift using circshift
-  let xshift = t.shape[0] div 2
-  let yshift = t.shape[1] div 2
-  let zshift = t.shape[2] div 2
-  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+  # let xshift = t.shape[0] div 2
+  # let yshift = t.shape[1] div 2
+  # let zshift = t.shape[2] div 2
+  # result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+  var shifts = t.shape.toSeq.map(x => (x) div 2)
+  result = circshift(t, shifts)
 
 proc ifftshift*[T](t: Tensor[T]): Tensor[T] =
   ## Common ifftshift function. Use Nim's openMP operator (`||`) for rank <= 3
@@ -122,8 +125,10 @@ proc ifftshift*[T](t: Tensor[T]): Tensor[T] =
     var output_tensor = ifftshift(input_tensor)
 
   # Calculate inverse fftshift using circshift
-  let xshift = (t.shape[0]+1) div 2
-  let yshift = (t.shape[1]+1) div 2
-  let zshift = (t.shape[2]+1) div 2
-  result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+  # let xshift = (t.shape[0]+1) div 2
+  # let yshift = (t.shape[1]+1) div 2
+  # let zshift = (t.shape[2]+1) div 2
+  # result = circshift(t, @[xshift.int, yshift.int, zshift.int])
+  var shifts = t.shape.toSeq.map(x => (x+1) div 2)
+  result = circshift(t, shifts)
 
