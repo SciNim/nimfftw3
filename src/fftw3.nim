@@ -52,6 +52,8 @@ import fftw3/libutils
 import fftw3/guru, fftw3/wisdom
 {.pop.}
 import fftw3/fftshift
+import fftw3/fftshift_weave
+export fftshift_weave
 # export used types
 export fftw_plan
 export fftw_r2r_kind
