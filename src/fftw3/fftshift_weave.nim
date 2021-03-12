@@ -10,17 +10,17 @@ import weave
 type
   Metadata = tuple[offset: int, strides, shape: seq[int]]
 
-proc getMeta[T](t: Tensor[T]): Metadata =
+func getMeta[T](t: Tensor[T]): Metadata =
   result.offset = t.offset
   result.strides = t.strides.toSeq
   result.shape = t.shape.toSeq
 
-proc getIndex*(m: Metadata, idx: varargs[int]): int {.noSideEffect, inline.} =
+func getIndex*(m: Metadata, idx: varargs[int]): int {.noSideEffect, inline.} =
   result = m.offset
   for i in 0..<idx.len:
     result += m.strides[i]*idx[i]
 
-proc getShiftedIndex*(m: Metadata, shifts: openArray[int], idx: varargs[int]): int {.noSideEffect, inline.} =
+func getShiftedIndex*(m: Metadata, shifts: openArray[int], idx: varargs[int]): int {.noSideEffect, inline.} =
   result = m.offset
   for i in 0..<idx.len:
     let newidx = (idx[i] + shifts[i]) mod m.shape[i]
