@@ -101,7 +101,10 @@ proc circshift*[T](t: Tensor[T], shift: seq[int]): Tensor[T] =
     result = circshift_impl(t, shift)
 
 proc fftshift*[T](t: Tensor[T]): Tensor[T] =
-  ## Common fftshift function. Use Nim's openMP operator (`||`) for rank <= 3
+  ## Common fftshift function.
+  ## Use Nim's openMP operator (`||`) for rank <= 3
+  ##
+  ## For parallel implementation using Weave, use fftshift_parallel
   runnableExamples:
     import arraymancer
     let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
@@ -113,7 +116,10 @@ proc fftshift*[T](t: Tensor[T]): Tensor[T] =
   result = circshift(t, shifts)
 
 proc ifftshift*[T](t: Tensor[T]): Tensor[T] =
-  ## Common ifftshift function. Use Nim's openMP operator (`||`) for rank <= 3
+  ## Common ifftshift function.
+  ## Use Nim's openMP operator (`||`) for rank <= 3.
+  ##
+  ## For parallel implementation using Weave, use ifftshift_parallel
   runnableExamples:
     import arraymancer
     let input_tensor = randomTensor[float64](10, 10, 10, 10.0)

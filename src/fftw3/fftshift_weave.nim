@@ -133,6 +133,8 @@ proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shift
     exit(Weave)
 
 proc fftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
+  ## fftshift implementation based on Weave.
+  ## weaveManualInit is a boolean flag indicating if weave in initialized (and finalized) manually outside this scope.
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => x div 2)
@@ -145,6 +147,8 @@ proc fftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[
   circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts, weaveManualInit)
 
 proc ifftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
+  ## ifftshift implementation based on Weave.
+  ## weaveManualInit is a boolean flag indicating if weave in initialized (and finalized) manually outside this scope.
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => (x+1) div 2)
