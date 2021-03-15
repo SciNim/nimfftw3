@@ -111,7 +111,7 @@ proc circshift6_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, s
               outBuf[getShiftedIndex(meta, shifts, i, j, k, l, m, n)] = inBuf[getIndex(meta, i, j, k, l, m, n)]
 
 proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int], weaveManualInit: bool) =
-  if weaveManualInit:
+  if not weaveManualInit:
     init(Weave)
   case shifts.len
   of 1:
@@ -129,7 +129,7 @@ proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shift
   else:
     raise newException(ValueError, "Can only supports tensor of rank 6")
 
-  if weaveManualInit:
+  if not weaveManualInit:
     exit(Weave)
 
 proc fftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
