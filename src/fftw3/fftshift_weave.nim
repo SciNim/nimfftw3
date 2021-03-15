@@ -110,9 +110,9 @@ proc circshift6_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, s
 
               outBuf[getShiftedIndex(meta, shifts, i, j, k, l, m, n)] = inBuf[getIndex(meta, i, j, k, l, m, n)]
 
-proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int]) =
-  init(Weave)
-  defer: exit(Weave)
+proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int], weaveManualInit: bool) =
+  if weaveManualInit:
+    init(Weave)
   case shifts.len
   of 1:
     circshift1_weave(inBuf, outBuf, m, shifts)
@@ -129,7 +129,10 @@ proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shift
   else:
     raise newException(ValueError, "Can only supports tensor of rank 6")
 
-proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
+  if weaveManualInit:
+    exit(Weave)
+
+proc fftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => x div 2)
@@ -139,9 +142,9 @@ proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
     ptrIn = t.unsafe_raw_offset().distinctBase()
     ptrOut = result.unsafe_raw_offset().distinctBase()
 
-  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts)
+  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts, weaveManualInit)
 
-proc ifftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
+proc ifftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => (x+1) div 2)
@@ -151,4 +154,4 @@ proc ifftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
     ptrIn = t.unsafe_raw_offset().distinctBase()
     ptrOut = result.unsafe_raw_offset().distinctBase()
 
-  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts)
+  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts, weaveManualInit)
