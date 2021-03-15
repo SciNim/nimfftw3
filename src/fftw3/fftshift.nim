@@ -104,7 +104,7 @@ proc fftshift*[T](t: Tensor[T]): Tensor[T] =
   ## Common fftshift function.
   ## Use Nim's openMP operator (`||`) for rank <= 3
   ##
-  ## For parallel implementation using Weave, use fftshift_parallel
+  ## For parallel implementation using Weave, use fftshift_parallel in fftw3/fftshift_weave
   runnableExamples:
     import arraymancer
     let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
@@ -119,7 +119,7 @@ proc ifftshift*[T](t: Tensor[T]): Tensor[T] =
   ## Common ifftshift function.
   ## Use Nim's openMP operator (`||`) for rank <= 3.
   ##
-  ## For parallel implementation using Weave, use ifftshift_parallel
+  ## For parallel implementation using Weave, use ifftshift_parallel in fftw3/fftshift_weave
   runnableExamples:
     import arraymancer
     let input_tensor = randomTensor[float64](10, 10, 10, 10.0)
