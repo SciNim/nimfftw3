@@ -110,9 +110,11 @@ proc circshift6_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, s
 
               outBuf[getShiftedIndex(meta, shifts, i, j, k, l, m, n)] = inBuf[getIndex(meta, i, j, k, l, m, n)]
 
-proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int], weaveManualInit: bool) =
-  if not weaveManualInit:
+proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int]) =
+
+  when not defined(weaveCustomInit):
     init(Weave)
+
   case shifts.len
   of 1:
     circshift1_weave(inBuf, outBuf, m, shifts)
@@ -129,12 +131,12 @@ proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shift
   else:
     raise newException(ValueError, "Can only supports tensor of rank 6")
 
-  if not weaveManualInit:
+  when not defined(weaveCustomInit):
     exit(Weave)
 
-proc fftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
+proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
   ## fftshift implementation based on Weave.
-  ## weaveManualInit is a boolean flag indicating if weave in initialized (and finalized) manually outside this scope.
+  ## Define weaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => x div 2)
@@ -144,11 +146,11 @@ proc fftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[
     ptrIn = t.unsafe_raw_offset().distinctBase()
     ptrOut = result.unsafe_raw_offset().distinctBase()
 
-  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts, weaveManualInit)
+  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts)
 
-proc ifftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor[T] =
+proc ifftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
   ## ifftshift implementation based on Weave.
-  ## weaveManualInit is a boolean flag indicating if weave in initialized (and finalized) manually outside this scope.
+  ## Define weaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => (x+1) div 2)
@@ -158,4 +160,4 @@ proc ifftshift_parallel*[T](t: Tensor[T], weaveManualInit: bool = false): Tensor
     ptrIn = t.unsafe_raw_offset().distinctBase()
     ptrOut = result.unsafe_raw_offset().distinctBase()
 
-  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts, weaveManualInit)
+  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts)
