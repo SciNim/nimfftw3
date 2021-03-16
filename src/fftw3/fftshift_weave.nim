@@ -112,7 +112,7 @@ proc circshift6_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, s
 
 proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int]) =
 
-  when not defined(weaveCustomInit):
+  when not defined(WeaveCustomInit):
     init(Weave)
 
   case shifts.len
@@ -131,12 +131,12 @@ proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shift
   else:
     raise newException(ValueError, "Can only supports tensor of rank 6")
 
-  when not defined(weaveCustomInit):
+  when not defined(WeaveCustomInit):
     exit(Weave)
 
 proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
   ## fftshift implementation based on Weave.
-  ## Define weaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
+  ## Define WeaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => x div 2)
@@ -150,7 +150,7 @@ proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
 
 proc ifftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
   ## ifftshift implementation based on Weave.
-  ## Define weaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
+  ## Define WeaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
   let
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => (x+1) div 2)
