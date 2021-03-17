@@ -7,127 +7,119 @@ import weave
 ###################################
 ## Tools
 ###################################
-type
-  Metadata = tuple[offset: int, strides, shape: seq[int]]
-
-func getMeta[T](t: Tensor[T]): Metadata =
-  result.offset = t.offset
-  result.strides = t.strides.toSeq
-  result.shape = t.shape.toSeq
-
-func getIndex*(m: Metadata, idx: varargs[int]): int {.noSideEffect, inline.} =
-  result = m.offset
+func getIndex*(offset: int, strides, shape: openArray[int], idx: varargs[int]): int {.noSideEffect, inline.} =
+  result = offset
   for i in 0..<idx.len:
-    result += m.strides[i]*idx[i]
+    result += strides[i]*idx[i]
 
-func getShiftedIndex*(m: Metadata, shifts: openArray[int], idx: varargs[int]): int {.noSideEffect, inline.} =
-  result = m.offset
+func getShiftedIndex*(offset: int, strides, shape: openArray[int], shifts: openArray[int], idx: varargs[int]): int {.noSideEffect, inline.} =
+  result = offset
   for i in 0..<idx.len:
-    let newidx = (idx[i] + shifts[i]) mod m.shape[i]
-    result += m.strides[i]*newidx
+    let newidx = (idx[i] + shifts[i]) mod shape[i]
+    result += strides[i]*newidx
 
 ###################################
 ## Circshift
 ###################################
-proc circshift1_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, shifts: seq[int]) =
-  parallelFor i in 0..<meta.shape[0]:
-    captures: {inBuf, outBuf, meta, shifts}
+proc circshift1_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
+  parallelFor i in 0..<shape[0]:
+    captures: {inBuf, outBuf, offset, strides, shape, shifts}
 
-    outBuf[getShiftedIndex(meta, shifts, i)] = inBuf[getIndex(meta, i)]
+    outBuf[getShiftedIndex(offset, strides, shape, shifts, i)] = inBuf[getIndex(offset, strides, shape, i)]
 
-proc circshift2_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, shifts: seq[int]) =
-  parallelFor i in 0..<meta.shape[0]:
-    captures: {inBuf, outBuf, meta, shifts}
+proc circshift2_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
+  parallelFor i in 0..<shape[0]:
+    captures: {inBuf, outBuf, offset, strides, shape, shifts}
 
-    parallelFor j in 0..<meta.shape[1]:
-      captures: {inBuf, outBuf, meta, shifts, i}
+    parallelFor j in 0..<shape[1]:
+      captures: {inBuf, outBuf, offset, strides, shape, shifts, i}
 
-      outBuf[getShiftedIndex(meta, shifts, i, j)] = inBuf[getIndex(meta, i, j)]
+      outBuf[getShiftedIndex(offset, strides, shape, shifts, i, j)] = inBuf[getIndex(offset, strides, shape, i, j)]
 
-proc circshift3_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, shifts: seq[int]) =
-  parallelFor i in 0..<meta.shape[0]:
-    captures: {inBuf, outBuf, meta, shifts}
+proc circshift3_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
+  parallelFor i in 0..<shape[0]:
+    captures: {inBuf, outBuf, offset, strides, shape, shifts}
 
-    parallelFor j in 0..<meta.shape[1]:
-      captures: {inBuf, outBuf, meta, shifts, i}
+    parallelFor j in 0..<shape[1]:
+      captures: {inBuf, outBuf, offset, strides, shape, shifts, i}
 
-      parallelFor k in 0..<meta.shape[2]:
-        captures: {inBuf, outBuf, meta, shifts, i, j}
+      parallelFor k in 0..<shape[2]:
+        captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j}
 
-        outBuf[getShiftedIndex(meta, shifts, i, j, k)] = inBuf[getIndex(meta, i, j, k)]
+        outBuf[getShiftedIndex(offset, strides, shape, shifts, i, j, k)] = inBuf[getIndex(offset, strides, shape, i, j, k)]
 
-proc circshift4_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, shifts: seq[int]) =
-  parallelFor i in 0..<meta.shape[0]:
-    captures: {inBuf, outBuf, meta, shifts}
+proc circshift4_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
+  parallelFor i in 0..<shape[0]:
+    captures: {inBuf, outBuf, offset, strides, shape, shifts}
 
-    parallelFor j in 0..<meta.shape[1]:
-      captures: {inBuf, outBuf, meta, shifts, i}
+    parallelFor j in 0..<shape[1]:
+      captures: {inBuf, outBuf, offset, strides, shape, shifts, i}
 
-      parallelFor k in 0..<meta.shape[2]:
-        captures: {inBuf, outBuf, meta, shifts, i, j}
+      parallelFor k in 0..<shape[2]:
+        captures: {inBuf, outBuf, offset, strides ,shape, shifts, i, j}
 
-        parallelFor l in 0..<meta.shape[3]:
-          captures: {inBuf, outBuf, meta, shifts, i, j, k}
+        parallelFor l in 0..<shape[3]:
+          captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j, k}
 
-          outBuf[getShiftedIndex(meta, shifts, i, j, k, l)] = inBuf[getIndex(meta, i, j, k, l)]
+          outBuf[getShiftedIndex(offset, strides, shape, shifts, i, j, k, l)] = inBuf[getIndex(offset, strides, shape, i, j, k, l)]
 
-proc circshift5_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, shifts: seq[int]) =
-  parallelFor i in 0..<meta.shape[0]:
-    captures: {inBuf, outBuf, meta, shifts}
+proc circshift5_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
+  parallelFor i in 0..<shape[0]:
+    captures: {inBuf, outBuf, offset, strides, shape, shifts}
 
-    parallelFor j in 0..<meta.shape[1]:
-      captures: {inBuf, outBuf, meta, shifts, i}
+    parallelFor j in 0..<shape[1]:
+      captures: {inBuf, outBuf, offset, strides, shape, shifts, i}
 
-      parallelFor k in 0..<meta.shape[2]:
-        captures: {inBuf, outBuf, meta, shifts, i, j}
+      parallelFor k in 0..<shape[2]:
+        captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j}
 
-        parallelFor l in 0..<meta.shape[3]:
-          captures: {inBuf, outBuf, meta, shifts, i, j, k}
+        parallelFor l in 0..<shape[3]:
+          captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j, k}
 
-          parallelFor m in 0..<meta.shape[4]:
-            captures: {inBuf, outBuf, meta, shifts, i, j, k, l}
+          parallelFor m in 0..<shape[4]:
+            captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j, k, l}
 
-            outBuf[getShiftedIndex(meta, shifts, i, j, k, l, m)] = inBuf[getIndex(meta, i, j, k, l, m)]
+            outBuf[getShiftedIndex(offset, strides, shape, shifts, i, j, k, l, m)] = inBuf[getIndex(offset, strides, shape, i, j, k, l, m)]
 
-proc circshift6_weave[T](inBuf, outBuf: ptr UncheckedArray[T], meta: Metadata, shifts: seq[int]) =
-  parallelFor i in 0..<meta.shape[0]:
-    captures: {inBuf, outBuf, meta, shifts}
+proc circshift6_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
+  parallelFor i in 0..<shape[0]:
+    captures: {inBuf, outBuf, offset, strides, shape, shifts}
 
-    parallelFor j in 0..<meta.shape[1]:
-      captures: {inBuf, outBuf, meta, shifts, i}
+    parallelFor j in 0..<shape[1]:
+      captures: {inBuf, outBuf, offset, strides, shape, shifts, i}
 
-      parallelFor k in 0..<meta.shape[2]:
-        captures: {inBuf, outBuf, meta, shifts, i, j}
+      parallelFor k in 0..<shape[2]:
+        captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j}
 
-        parallelFor l in 0..<meta.shape[3]:
-          captures: {inBuf, outBuf, meta, shifts, i, j, k}
+        parallelFor l in 0..<shape[3]:
+          captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j, k}
 
-          parallelFor m in 0..<meta.shape[4]:
-            captures: {inBuf, outBuf, meta, shifts, i, j, k, l}
+          parallelFor m in 0..<shape[4]:
+            captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j, k, l}
 
-            parallelFor n in 0..<meta.shape[5]:
-              captures: {inBuf, outBuf, meta, shifts, i, j, k, l, m}
+            parallelFor n in 0..<shape[5]:
+              captures: {inBuf, outBuf, offset, strides, shape, shifts, i, j, k, l, m}
 
-              outBuf[getShiftedIndex(meta, shifts, i, j, k, l, m, n)] = inBuf[getIndex(meta, i, j, k, l, m, n)]
+              outBuf[getShiftedIndex(offset, strides, shape, shifts, i, j, k, l, m, n)] = inBuf[getIndex(offset, strides, shape, i, j, k, l, m, n)]
 
-proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shifts: seq[int]) =
+proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], offset: int, strides, shape: seq[int], shifts: seq[int]) =
 
   when not defined(WeaveCustomInit):
     init(Weave)
 
   case shifts.len
   of 1:
-    circshift1_weave(inBuf, outBuf, m, shifts)
+    circshift1_weave(inBuf, outBuf, offset, strides, shape, shifts)
   of 2:
-    circshift2_weave(inBuf, outBuf, m, shifts)
+    circshift2_weave(inBuf, outBuf, offset, strides, shape, shifts)
   of 3:
-    circshift3_weave(inBuf, outBuf, m, shifts)
+    circshift3_weave(inBuf, outBuf, offset, strides, shape, shifts)
   of 4:
-    circshift4_weave(inBuf, outBuf, m, shifts)
+    circshift4_weave(inBuf, outBuf, offset, strides, shape, shifts)
   of 5:
-    circshift5_weave(inBuf, outBuf, m, shifts)
+    circshift5_weave(inBuf, outBuf, offset, strides, shape, shifts)
   of 6:
-    circshift6_weave(inBuf, outBuf, m, shifts)
+    circshift6_weave(inBuf, outBuf, offset, strides, shape, shifts)
   else:
     raise newException(ValueError, "Can only supports tensor of rank 6")
 
@@ -136,8 +128,9 @@ proc circshift_weave[T](inBuf, outBuf: ptr UncheckedArray[T], m: Metadata, shift
 
 proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
   ## fftshift implementation based on Weave.
-  ## Define WeaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
+  ## Use ``-d:WeaveCustomInit`` to indicate that weave is initialized (and finalized) manually outside this scope.
   let
+    strides = t.strides.toSeq
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => x div 2)
   # Alloc Tensor
@@ -146,12 +139,13 @@ proc fftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
     ptrIn = t.unsafe_raw_offset().distinctBase()
     ptrOut = result.unsafe_raw_offset().distinctBase()
 
-  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts)
+  circshift_weave[T](ptrIn, ptrOut, t.offset, strides, shape, shifts)
 
 proc ifftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
   ## ifftshift implementation based on Weave.
-  ## Define WeaveCustomInit flag to indicate that weave is initialized (and finalized) manually outside this scope.
+  ## Use ``-d:WeaveCustomInit`` flag to indicate that weave is initialized (and finalized) manually outside this scope.
   let
+    strides = t.strides.toSeq
     shape = t.shape.toSeq
     shifts = t.shape.toSeq.map(x => (x+1) div 2)
   # Alloc Tensor
@@ -160,4 +154,4 @@ proc ifftshift_parallel*[T](t: Tensor[T]): Tensor[T] =
     ptrIn = t.unsafe_raw_offset().distinctBase()
     ptrOut = result.unsafe_raw_offset().distinctBase()
 
-  circshift_weave[T](ptrIn, ptrOut, getMeta(t), shifts)
+  circshift_weave[T](ptrIn, ptrOut, t.offset, strides, shape, shifts)
