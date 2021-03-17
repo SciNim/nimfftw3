@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.4.1"
+version       = "0.4.2"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
