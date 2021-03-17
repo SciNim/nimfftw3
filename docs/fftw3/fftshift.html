@@ -134,7 +134,9 @@ Generic Circshift
 <dt><pre><span class="Keyword">proc</span> <a href="#fftshift%2CTensor%5BT%5D"><span class="Identifier">fftshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 
-Common fftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3
+<p>Common fftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3</p>
+<p>For parallel implementation based on Weave, use <tt class="docutils literal"><span class="pre">fftshift_parallel</span></tt> in <tt class="docutils literal"><span class="pre">fftw3/fftshift_weave</span></tt></p>
+
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
 </span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
@@ -146,7 +148,9 @@ Common fftshift function. Use Nim's openMP operator (<tt class="docutils literal
 <dt><pre><span class="Keyword">proc</span> <a href="#ifftshift%2CTensor%5BT%5D"><span class="Identifier">ifftshift</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 
-Common ifftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3
+<p>Common ifftshift function. Use Nim's openMP operator (<tt class="docutils literal"><span class="pre">||</span></tt>) for rank &lt;= 3.</p>
+<p>For parallel implementation based on Weave, use <tt class="docutils literal"><span class="pre">ifftshift_parallel</span></tt> in <tt class="docutils literal"><span class="pre">fftw3/fftshift_weave</span></tt></p>
+
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span><span class="Whitespace"> </span><span class="Identifier">arraymancer</span><span class="Whitespace">
 </span><span class="Keyword">let</span><span class="Whitespace"> </span><span class="Identifier">input_tensor</span><span class="Whitespace"> </span><span class="Operator">=</span><span class="Whitespace"> </span><span class="Identifier">randomTensor</span><span class="Punctuation">[</span><span class="Identifier">float64</span><span class="Punctuation">]</span><span class="Punctuation">(</span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="DecNumber">10</span><span class="Punctuation">,</span><span class="Whitespace"> </span><span class="FloatNumber">10.0</span><span class="Punctuation">)</span><span class="Whitespace">
@@ -164,7 +168,7 @@ Common ifftshift function. Use Nim's openMP operator (<tt class="docutils litera
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2021-02-03 11:12:47 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-03-17 10:35:12 UTC</small>
       </div>
     </div>
   </div>
