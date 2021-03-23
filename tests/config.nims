@@ -1,3 +1,4 @@
 switch("path", "$projectDir/../src")
 switch("threads", "on")
-switch("outdir", "tests/bin")
+when not defined(testing):
+  switch("outdir", "tests/bin")

@@ -16,3 +16,6 @@ requires "weave#master"
 task gendoc, "gen doc":
   exec("nimble doc --project src/fftw3.nim --out:docs/")
 
+when defined(nimdistros):
+  import distros
+  foreignDep "fftw3-devel"
