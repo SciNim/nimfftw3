@@ -15,5 +15,5 @@ jobs:
         id: install_nim
         uses: iffy/install-nim@v3
       - run: nimble install -y
-      - run: apt-get install fftw3-devel
+      - run: sudo apt-get install fftw3-devel
       - run: testament r tests/testall.nim
