@@ -1,6 +1,6 @@
 # FFTW3
 
-![workflow](https://github.com/SciNim/fftw3/actions/workflows/ci.yml/badge.svg)
+![workflow](https://github.com/SciNim/nimfftw3/actions/workflows/ci.yml/badge.svg)
 
 ## Introduction
 
