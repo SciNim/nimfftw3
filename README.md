@@ -21,11 +21,13 @@ Note that FFTW3 is untested for Windows but a Windows version exists.
 
 ### Documentations
 
-API Documentations with some : https://scinim.github.io/nimfftw3/
+API Documentations with some examples : https://scinim.github.io/nimfftw3/
 
 FFTW3 official documentation : http://www.fftw.org/fftw3_doc/
 
 ### Example
+
+See ``tests/testall.nim`` for example of FFT using Seq and Tensor.
 
 ## Contributing and evolution
 

@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.4.2"
+version       = "0.4.3"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
@@ -18,4 +18,8 @@ task gendoc, "gen doc":
 
 when defined(nimdistros):
   import distros
-  foreignDep "fftw3-devel"
+  if detectOs(Ubuntu) or detectOs(Debian):
+    foreignDep "fftw3-dev"
+  elif detectOs(OpenSUSE):
+    foreignDep "fftw3-devel"
+  echoForeignDeps()
