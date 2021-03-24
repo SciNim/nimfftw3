@@ -10,8 +10,8 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 1.2.0"
-requires "arraymancer#master"
-requires "weave#master"
+requires "arraymancer >= 0.6.3"
+requires "weave >= 0.4.9"
 
 task gendoc, "gen doc":
   exec("nimble doc --project src/fftw3.nim --out:docs/")
