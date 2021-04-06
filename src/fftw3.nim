@@ -151,14 +151,6 @@ proc fftw_plan_dft*(rank: cint, n: ptr cint, inptr: ptr UncheckedArray[Complex64
                     outptr: ptr UncheckedArray[Complex64], sign: cint, flags: cuint): fftw_plan {.
     cdecl, importc: "fftw_plan_dft", dynlib: Fftw3Lib.}
 
-proc fftw_plan_dft*(input: Tensor[Complex64], output: Tensor[Complex64], sign: cint,
-        flags: cuint = FFTW_MEASURE): fftw_plan =
-    ## Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-    ##
-    ## Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
-    var shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
-    result = fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.toUnsafeView(), output.toUnsafeView(), sign, flags)
-
 proc fftw_plan_dft_1d*(n: cint, inptr: ptr UncheckedArray[Complex64], outptr: ptr UncheckedArray[Complex64], sign: cint,
         flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_1d", dynlib: Fftw3Lib.}
 
@@ -168,16 +160,25 @@ proc fftw_plan_dft_2d*(n0: cint, n1: cint, inptr: ptr UncheckedArray[Complex64],
 proc fftw_plan_dft_3d*(n0: cint, n1: cint, n2: cint, inptr: ptr UncheckedArray[Complex64], outptr: ptr UncheckedArray[
         Complex64], sign: cint, flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_3d", dynlib: Fftw3Lib.}
 
+proc fftw_plan_dft*(input: Tensor[Complex64], output: Tensor[Complex64], sign: cint,
+        flags: cuint = FFTW_MEASURE): fftw_plan =
+    ## Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+    ##
+    ## Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.
+    case input.rank:
+    of 1:
+      fftw_plan_dft_1d(input.shape[0].cint, input.toUnsafeView(), output.toUnsafeView(), sign, flags)
+    of 2:
+      fftw_plan_dft_2d(input.shape[0].cint, input.shape[1].cint, input.toUnsafeView(), output.toUnsafeView(), sign, flags)
+    of 3:
+      fftw_plan_dft_3d(input.shape[0].cint, input.shape[1].cint, input.shape[2].cint, input.toUnsafeView(), output.toUnsafeView(), sign, flags)
+    else:
+      var shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
+      fftw_plan_dft(input.rank.cint, (shape[0].unsafeaddr), input.toUnsafeView(), output.toUnsafeView(), sign, flags)
+
+
 proc fftw_plan_dft_r2c*(rank: cint, n: ptr cint, inptr: ptr UncheckedArray[cdouble], outptr: ptr UncheckedArray[
         Complex64], flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_r2c", dynlib: Fftw3Lib.}
-
-proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[Complex64], flags: cuint = FFTW_MEASURE): fftw_plan =
-    ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-    ##
-    ## Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
-    let shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
-    result = fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), cast[ptr UncheckedArray[cdouble]](
-            input.toUnsafeView()), output.toUnsafeView(), flags)
 
 proc fftw_plan_dft_r2c_1d*(n: cint, inptr: ptr UncheckedArray[cdouble], outptr: ptr UncheckedArray[Complex64],
         flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_r2c_1d", dynlib: Fftw3Lib.}
@@ -189,14 +190,24 @@ proc fftw_plan_dft_r2c_2d*(n0: cint, n1: cint, inptr: ptr UncheckedArray[cdouble
 proc fftw_plan_dft_r2c_3d*(n0: cint, n1: cint, n2: cint, inptr: ptr UncheckedArray[cdouble], outptr: ptr UncheckedArray[
         Complex64], flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_r2c_3d", dynlib: Fftw3Lib.}
 
+proc fftw_plan_dft_r2c*(input: Tensor[float64], output: Tensor[Complex64], flags: cuint = FFTW_MEASURE): fftw_plan =
+    ## Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+    ##
+    ## Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.
+    case input.rank:
+    of 1:
+      fftw_plan_dft_r2c_1d(input.shape[0].cint, input.toUnsafeView(), output.toUnsafeView(), flags)
+    of 2:
+      fftw_plan_dft_r2c_2d(input.shape[0].cint, input.shape[1].cint, input.toUnsafeView(), output.toUnsafeView(), flags)
+    of 3:
+      fftw_plan_dft_r2c_3d(input.shape[0].cint, input.shape[1].cint, input.shape[2].cint, input.toUnsafeView(), output.toUnsafeView(), flags)
+    else:
+      let shape: seq[cint] = map(input.shape.toSeq(), proc(x: int): cint = x.cint)
+      fftw_plan_dft_r2c(input.rank.cint, (shape[0].unsafeaddr), input.toUnsafeView(), output.toUnsafeView(), flags)
+
+
 proc fftw_plan_dft_c2r*(rank: cint, n: ptr cint, inptr: ptr UncheckedArray[Complex64], outptr: ptr UncheckedArray[
         cdouble], flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_c2r", dynlib: Fftw3Lib.}
-
-proc fftw_plan_dft_c2r*(input: Tensor[Complex64], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan =
-    ## Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-    let shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
-    result = fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.toUnsafeView(), cast[ptr UncheckedArray[
-            cdouble]](output.toUnsafeView()), flags)
 
 proc fftw_plan_dft_c2r_1d*(n: cint, inptr: ptr UncheckedArray[Complex64], outptr: ptr UncheckedArray[cdouble],
         flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_c2r_1d", dynlib: Fftw3Lib.}
@@ -208,15 +219,21 @@ proc fftw_plan_dft_c2r_3d*(n0: cint, n1: cint, n2: cint, inptr: ptr UncheckedArr
         outptr: ptr UncheckedArray[cdouble], flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_dft_c2r_3d",
         dynlib: Fftw3Lib.}
 
+proc fftw_plan_dft_c2r*(input: Tensor[Complex64], output: Tensor[float64], flags: cuint = FFTW_MEASURE): fftw_plan =
+    ## Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+    case input.rank:
+    of 1:
+      fftw_plan_dft_c2r_1d(input.shape[0].cint, input.toUnsafeView(), output.toUnsafeView(), flags)
+    of 2:
+      fftw_plan_dft_c2r_2d(input.shape[0].cint, input.shape[1].cint, input.toUnsafeView(), output.toUnsafeView(), flags)
+    of 3:
+      fftw_plan_dft_c2r_3d(input.shape[0].cint, input.shape[1].cint, input.shape[2].cint, input.toUnsafeView(), output.toUnsafeView(), flags)
+    else:
+      let shape: seq[cint] = map(input.shape.toSeq(), proc(x: int): cint = x.cint)
+      fftw_plan_dft_c2r(input.rank.cint, (shape[0].unsafeaddr), input.toUnsafeView(), output.toUnsafeView(), flags)
+
 proc fftw_plan_r2r*(rank: cint, n: ptr cint, inptr: ptr UncheckedArray[cdouble], outptr: ptr UncheckedArray[cdouble],
         kind: ptr fftw_r2r_kind, flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_r2r", dynlib: Fftw3Lib.}
-
-proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind],
-        flags: cuint = FFTW_MEASURE): fftw_plan =
-    ## Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
-    let shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
-    result = fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, cast[ptr UncheckedArray[cdouble]](input.toUnsafeView(
-        )), cast[ptr UncheckedArray[cdouble]](output.toUnsafeView()), kinds[0].unsafeaddr, flags)
 
 proc fftw_plan_r2r_1d*(n: cint, inptr: ptr UncheckedArray[cdouble], outptr: ptr UncheckedArray[cdouble],
         kind: fftw_r2r_kind, flags: cuint): fftw_plan {.cdecl, importc: "fftw_plan_r2r_1d", dynlib: Fftw3Lib.}
@@ -228,6 +245,20 @@ proc fftw_plan_r2r_2d*(n0: cint, n1: cint, inptr: ptr UncheckedArray[cdouble], o
 proc fftw_plan_r2r_3d*(n0: cint, n1: cint, n2: cint, inptr: ptr UncheckedArray[cdouble], outptr: ptr UncheckedArray[
         cdouble], kind0: fftw_r2r_kind, kind1: fftw_r2r_kind, kind2: fftw_r2r_kind, flags: cuint): fftw_plan {.cdecl,
         importc: "fftw_plan_r2r_3d", dynlib: Fftw3Lib.}
+
+proc fftw_plan_r2r*(input: Tensor[float64], output: Tensor[float64], kinds: seq[fftw_r2r_kind],
+        flags: cuint = FFTW_MEASURE): fftw_plan =
+    ## Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+    case input.rank:
+    of 1:
+      fftw_plan_r2r_1d(input.shape[0].cint, input.toUnsafeView(), output.toUnsafeView(), kinds[0], flags)
+    of 2:
+      fftw_plan_r2r_2d(input.shape[0].cint, input.shape[1].cint, input.toUnsafeView(), output.toUnsafeView(), kinds[0], kinds[1], flags)
+    of 3:
+      fftw_plan_r2r_3d(input.shape[0].cint, input.shape[1].cint, input.shape[2].cint, input.toUnsafeView(), output.toUnsafeView(), kinds[0], kinds[1], kinds[2], flags)
+    else:
+      let shape: seq[cint] = map(input.shape.toSeq, proc(x: int): cint = x.cint)
+      fftw_plan_r2r(input.rank.cint, shape[0].unsafeaddr, input.toUnsafeView(), output.toUnsafeView(), kinds[0].unsafeaddr, flags)
 
 # FFTW Plan Many API
 proc fftw_plan_many_dft*(rank: cint, n: ptr cint, howmany: cint, inptr: ptr UncheckedArray[Complex64],
