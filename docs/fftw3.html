@@ -590,17 +590,6 @@ Execute a complex-to-real plan on new Tensor
 
 
 </dd>
-<a id="fftw_plan_dft,Tensor[Complex64],Tensor[Complex64],cint,cuint"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft%2CTensor%5BComplex64%5D%2CTensor%5BComplex64%5D%2Ccint%2Ccuint"><span class="Identifier">fftw_plan_dft</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span>
-                   <span class="Identifier">sign</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
-    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-<p>Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.</p>
-<p>Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.</p>
-
-
-</dd>
 <a id="fftw_plan_dft_1d,cint,ptr.UncheckedArray[Complex64],ptr.UncheckedArray[Complex64],cint,cuint"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_1d%2Ccint%2Cptr.UncheckedArray%5BComplex64%5D%2Cptr.UncheckedArray%5BComplex64%5D%2Ccint%2Ccuint"><span class="Identifier">fftw_plan_dft_1d</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">inptr</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span>
                       <span class="Identifier">outptr</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">sign</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span>
@@ -632,6 +621,17 @@ Execute a complex-to-real plan on new Tensor
 
 
 </dd>
+<a id="fftw_plan_dft,Tensor[Complex64],Tensor[Complex64],cint,cuint"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft%2CTensor%5BComplex64%5D%2CTensor%5BComplex64%5D%2Ccint%2Ccuint"><span class="Identifier">fftw_plan_dft</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span>
+                   <span class="Identifier">sign</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+<p>Generic Tensor plan calculation using FFTW_MEASURE as a default fftw flag.</p>
+<p>Read carefully FFTW documentation about the input / output dimension it will change depending on the transformation.</p>
+
+
+</dd>
 <a id="fftw_plan_dft_r2c,cint,ptr.cint,ptr.UncheckedArray[cdouble],ptr.UncheckedArray[Complex64],cuint"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_r2c%2Ccint%2Cptr.cint%2Cptr.UncheckedArray%5Bcdouble%5D%2Cptr.UncheckedArray%5BComplex64%5D%2Ccuint"><span class="Identifier">fftw_plan_dft_r2c</span></a><span class="Other">(</span><span class="Identifier">rank</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">cint</span><span class="Other">;</span>
                        <span class="Identifier">inptr</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">cdouble</span><span class="Other">]</span><span class="Other">;</span>
@@ -639,17 +639,6 @@ Execute a complex-to-real plan on new Tensor
     <span class="Identifier">cdecl</span><span class="Other">,</span> <span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;fftw_plan_dft_r2c&quot;</span><span class="Other">,</span> <span class="Identifier">dynlib</span><span class="Other">:</span> <span class="Identifier">Fftw3Lib</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-
-
-</dd>
-<a id="fftw_plan_dft_r2c,Tensor[float64],Tensor[Complex64],cuint"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_r2c%2CTensor%5Bfloat64%5D%2CTensor%5BComplex64%5D%2Ccuint"><span class="Identifier">fftw_plan_dft_r2c</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span>
-                       <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-<p>Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.</p>
-<p>Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.</p>
 
 
 </dd>
@@ -682,6 +671,17 @@ Execute a complex-to-real plan on new Tensor
 
 
 </dd>
+<a id="fftw_plan_dft_r2c,Tensor[float64],Tensor[Complex64],cuint"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_r2c%2CTensor%5Bfloat64%5D%2CTensor%5BComplex64%5D%2Ccuint"><span class="Identifier">fftw_plan_dft_r2c</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span>
+                       <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+<p>Generic Real-to-Complex Tensor plan calculation using FFTW_MEASURE as a default fftw flag.</p>
+<p>Read carefully FFTW documentation about the input / output dimension as FFTW does not calculate redundant conjugate value.</p>
+
+
+</dd>
 <a id="fftw_plan_dft_c2r,cint,ptr.cint,ptr.UncheckedArray[Complex64],ptr.UncheckedArray[cdouble],cuint"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_c2r%2Ccint%2Cptr.cint%2Cptr.UncheckedArray%5BComplex64%5D%2Cptr.UncheckedArray%5Bcdouble%5D%2Ccuint"><span class="Identifier">fftw_plan_dft_c2r</span></a><span class="Other">(</span><span class="Identifier">rank</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">cint</span><span class="Other">;</span>
                        <span class="Identifier">inptr</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span>
@@ -690,15 +690,6 @@ Execute a complex-to-real plan on new Tensor
 <dd>
 
 
-
-</dd>
-<a id="fftw_plan_dft_c2r,Tensor[Complex64],Tensor[float64],cuint"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_c2r%2CTensor%5BComplex64%5D%2CTensor%5Bfloat64%5D%2Ccuint"><span class="Identifier">fftw_plan_dft_c2r</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span>
-                       <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
 
 </dd>
 <a id="fftw_plan_dft_c2r_1d,cint,ptr.UncheckedArray[Complex64],ptr.UncheckedArray[cdouble],cuint"></a>
@@ -730,6 +721,15 @@ Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default 
 
 
 </dd>
+<a id="fftw_plan_dft_c2r,Tensor[Complex64],Tensor[float64],cuint"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_dft_c2r%2CTensor%5BComplex64%5D%2CTensor%5Bfloat64%5D%2Ccuint"><span class="Identifier">fftw_plan_dft_c2r</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">Complex64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span>
+                       <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
+
+</dd>
 <a id="fftw_plan_r2r,cint,ptr.cint,ptr.UncheckedArray[cdouble],ptr.UncheckedArray[cdouble],ptr.fftw_r2r_kind,cuint"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_r2r%2Ccint%2Cptr.cint%2Cptr.UncheckedArray%5Bcdouble%5D%2Cptr.UncheckedArray%5Bcdouble%5D%2Cptr.fftw_r2r_kind%2Ccuint"><span class="Identifier">fftw_plan_r2r</span></a><span class="Other">(</span><span class="Identifier">rank</span><span class="Other">:</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">cint</span><span class="Other">;</span> <span class="Identifier">inptr</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">cdouble</span><span class="Other">]</span><span class="Other">;</span>
                    <span class="Identifier">outptr</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">cdouble</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">kind</span><span class="Other">:</span> <span class="Keyword">ptr</span> <a href="fftw3/libutils.html#fftw_r2r_kind"><span class="Identifier">fftw_r2r_kind</span></a><span class="Other">;</span>
@@ -738,15 +738,6 @@ Generic Complex-to-real Tensor plan calculation using FFTW_MEASURE as a default 
 <dd>
 
 
-
-</dd>
-<a id="fftw_plan_r2r,Tensor[float64],Tensor[float64],seq[fftw_r2r_kind],cuint"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_r2r%2CTensor%5Bfloat64%5D%2CTensor%5Bfloat64%5D%2Cseq%5Bfftw_r2r_kind%5D%2Ccuint"><span class="Identifier">fftw_plan_r2r</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span>
-                   <span class="Identifier">kinds</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="fftw3/libutils.html#fftw_r2r_kind"><span class="Identifier">fftw_r2r_kind</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
-    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
 
 </dd>
 <a id="fftw_plan_r2r_1d,cint,ptr.UncheckedArray[cdouble],ptr.UncheckedArray[cdouble],fftw_r2r_kind,cuint"></a>
@@ -778,6 +769,15 @@ Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fft
 <dd>
 
 
+
+</dd>
+<a id="fftw_plan_r2r,Tensor[float64],Tensor[float64],seq[fftw_r2r_kind],cuint"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#fftw_plan_r2r%2CTensor%5Bfloat64%5D%2CTensor%5Bfloat64%5D%2Cseq%5Bfftw_r2r_kind%5D%2Ccuint"><span class="Identifier">fftw_plan_r2r</span></a><span class="Other">(</span><span class="Identifier">input</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">output</span><span class="Other">:</span> <span class="Identifier">Tensor</span><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span><span class="Other">;</span>
+                   <span class="Identifier">kinds</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="fftw3/libutils.html#fftw_r2r_kind"><span class="Identifier">fftw_r2r_kind</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">flags</span><span class="Other">:</span> <span class="Identifier">cuint</span> <span class="Other">=</span> <span class="Identifier">FFTW_MEASURE</span><span class="Other">)</span><span class="Other">:</span> <a href="fftw3/libutils.html#fftw_plan"><span class="Identifier">fftw_plan</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Generic real-to-real Tensor plan calculation using FFTW_MEASURE as a default fftw flag.
 
 </dd>
 <a id="fftw_plan_many_dft,cint,ptr.cint,cint,ptr.UncheckedArray[Complex64],ptr.cint,cint,cint,ptr.UncheckedArray[Complex64],ptr.cint,cint,cint,cint,cuint"></a>
@@ -873,7 +873,7 @@ All existing plans become undefined, and you should not attempt to execute them 
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2021-03-24 13:14:06 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-04-06 07:25:21 UTC</small>
       </div>
     </div>
   </div>
