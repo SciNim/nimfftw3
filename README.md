@@ -56,3 +56,4 @@ These bindings were originally generated here : https://github.com/ziotom78/nimf
 ## License
 
 These bindings are released under a LGPL license. FFTW3 is released under a GPLv2 or above license.
+
