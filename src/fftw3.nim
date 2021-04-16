@@ -292,6 +292,9 @@ proc fftw_plan_many_r2r*(rank: cint, n: ptr cint, howmany: cint,
                          flags: cuint): fftw_plan {.cdecl,
     importc: "fftw_plan_many_r2r", dynlib: Fftw3Lib.}
 
+proc fftw_set_timelimit*(t: cdouble) {.cdecl, importc: "fftw_set_timelimit", dynlib: Fftw3Lib.}
+  ## Set timelimit to FFT
+
 # FFTW Utility & Cleanup API
 proc fftw_destroy_plan*(p: fftw_plan) {.cdecl, importc: "fftw_destroy_plan", dynlib: Fftw3Lib.}
   ## Destroy a plan
@@ -299,12 +302,14 @@ proc fftw_destroy_plan*(p: fftw_plan) {.cdecl, importc: "fftw_destroy_plan", dyn
 proc fftw_cleanup*() {.cdecl, importc: "fftw_cleanup", dynlib: Fftw3Lib.}
   ## All existing plans become undefined, and you should not attempt to execute them nor to destroy them. You can however create and execute/destroy new plans, in which case FFTW starts accumulating wisdom information again.
 
-proc fftw_set_timelimit*(t: cdouble) {.cdecl, importc: "fftw_set_timelimit", dynlib: Fftw3Lib.}
-
 when compileOption("threads"):
   proc fftw_init_threads*() {.cdecl, importc: "fftw_init_threads", dynlib: Fftw3ThreadLib.}
+    ## Initialize once before using thread-ed plan
+    ## Needs ``--threads:on`` to be enabled
   proc fftw_plan_with_nthreads*(nthreads: cint) {.cdecl, importc: "fftw_plan_with_nthreads", dynlib: Fftw3ThreadLib.}
+    ## Set the number of threads to use
+    ## Needs ``--threads:on`` to be enabled
   proc fftw_cleanup_threads*() {.cdecl, importc: "fftw_cleanup_threads", dynlib: Fftw3ThreadLib.}
-#   {.passL: "-lfftw3_threads"}
-# {.passL: "-lfftw3"}
+    ## Additional clean-up when threads are used
+    ## Needs ``--threads:on`` to be enabled
 
