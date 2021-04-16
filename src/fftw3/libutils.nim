@@ -4,10 +4,16 @@ import complex
 
 when defined(windows):
     const Fftw3Lib* = "fftw3.dll"
+    when compileOption("threads"):
+      const Fftw3ThreadLib* = "fftw3_threads.dll"
 elif defined(macosx):
     const Fftw3Lib* = "libfftw3(|.0).dylib"
+    when compileOption("threads"):
+      const Fftw3ThreadLib* = "libfftw3_threads(|.0).dylib"
 else:
     const Fftw3Lib* = "libfftw3.so(|.3)"
+    when compileOption("threads"):
+      const Fftw3ThreadLib* = "libfftw3_threads(|.3).so"
 
 type
     fftw_r2r_kind* = enum
