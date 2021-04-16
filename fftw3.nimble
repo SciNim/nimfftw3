@@ -14,7 +14,7 @@ requires "arraymancer >= 0.6.3"
 requires "weave >= 0.4.9"
 
 task gendoc, "gen doc":
-  exec("nimble doc --project src/fftw3.nim --out:docs/")
+  exec("nimble doc --threads:on --project src/fftw3.nim --out:docs/")
 
 import distros
 task externalDep, "package":
