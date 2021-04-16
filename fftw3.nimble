@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.4.6"
+version       = "0.4.7"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
@@ -19,10 +19,9 @@ task gendoc, "gen doc":
 import distros
 task externalDep, "package":
   when defined(nimdistros):
-    if detectOs(Ubuntu) or detectOs(Debian):
+    if detectOs(Ubuntu) or detectOs(Debian) or detectOs(OpenSUSE):
       foreignDep "fftw3-dev"
-    elif detectOs(OpenSUSE):
-      foreignDep "fftw3-devel"
+      foreignDep "fftw3-threads-dev"
     echo "Install libfftw3 using a package manager : "
     echoForeignDeps()
 
