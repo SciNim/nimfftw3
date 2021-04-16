@@ -301,3 +301,10 @@ proc fftw_cleanup*() {.cdecl, importc: "fftw_cleanup", dynlib: Fftw3Lib.}
 
 proc fftw_set_timelimit*(t: cdouble) {.cdecl, importc: "fftw_set_timelimit", dynlib: Fftw3Lib.}
 
+when compileOption("threads"):
+  proc fftw_init_threads*() {.cdecl, importc: "fftw_init_threads", dynlib: Fftw3ThreadLib.}
+  proc fftw_plan_with_nthreads*(nthreads: cint) {.cdecl, importc: "fftw_plan_with_nthreads", dynlib: Fftw3ThreadLib.}
+  proc fftw_cleanup_threads*() {.cdecl, importc: "fftw_cleanup_threads", dynlib: Fftw3ThreadLib.}
+#   {.passL: "-lfftw3_threads"}
+# {.passL: "-lfftw3"}
+
