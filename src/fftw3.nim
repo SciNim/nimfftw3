@@ -305,8 +305,11 @@ proc fftw_cleanup*() {.cdecl, importc: "fftw_cleanup", dynlib: Fftw3Lib.}
 when compileOption("threads"):
   proc fftw_init_threads*() {.cdecl, importc: "fftw_init_threads", dynlib: Fftw3ThreadLib.}
     ## Initialize once before using thread-ed plan
+    ## Needs ``--threads:on`` to be enabled
   proc fftw_plan_with_nthreads*(nthreads: cint) {.cdecl, importc: "fftw_plan_with_nthreads", dynlib: Fftw3ThreadLib.}
     ## Set the number of threads to use
+    ## Needs ``--threads:on`` to be enabled
   proc fftw_cleanup_threads*() {.cdecl, importc: "fftw_cleanup_threads", dynlib: Fftw3ThreadLib.}
     ## Additional clean-up when threads are used
+    ## Needs ``--threads:on`` to be enabled
 
