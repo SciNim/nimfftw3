@@ -20,8 +20,8 @@ task gendoc, "gen doc":
 task installFftw, "Build and install a local copy of FFTW":
   selfExec("r install/fftw_installer.nim")
 
-before install:
+after install:
   installFftwTask()
 
-before develop:
+after develop:
   installFftwTask()
