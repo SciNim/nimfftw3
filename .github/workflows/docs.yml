@@ -14,7 +14,6 @@ jobs:
         id: install_nim
         uses: iffy/install-nim@v3
       - run: nimble install -y
-      - run: sudo apt-get install fftw3 fftw3-dev
       - name: Set CI config github
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
