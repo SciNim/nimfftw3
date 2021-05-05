@@ -1,10 +1,9 @@
 # Package
 
-version       = "0.4.7"
+version       = "0.4.8"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
-srcDir        = "src"
 
 
 # Dependencies
@@ -12,21 +11,18 @@ srcDir        = "src"
 requires "nim >= 1.2.0"
 requires "arraymancer >= 0.6.3"
 requires "weave >= 0.4.9"
+requires "zippy"
 
 task gendoc, "gen doc":
   exec("nimble doc --threads:on --project src/fftw3.nim --out:docs/")
 
-import distros
-task externalDep, "package":
-  when defined(nimdistros):
-    if detectOs(Ubuntu) or detectOs(Debian) or detectOs(OpenSUSE):
-      foreignDep "fftw3-dev"
-      foreignDep "fftw3-threads-dev"
-    echo "Install libfftw3 using a package manager : "
-    echoForeignDeps()
+task installFftw, "Build and install a local copy of FFTW":
+  if not dirExists "vendor":
+    mkDir "vendor"
+  selfExec("r install/fftw_installer.nim")
 
-after install:
-  externalDepTask()
+before install:
+  installFftwTask()
 
-after develop:
-  externalDepTask()
+before develop:
+  installFftwTask()

@@ -1,42 +1,36 @@
 import complex
+import os
 
 ## Some utility types and functions not directly used to calculate FFT
-
+const libPath = currentSourcePath.parentDir().parentDir() / "vendor" / "libs"
 when defined(windows):
-    const Fftw3Lib* = "fftw3.dll"
-    when compileOption("threads"):
-      const Fftw3ThreadLib* = "fftw3_threads.dll"
+  const Fftw3Lib* = libPath / "libfftw3-3.dll"
 elif defined(macosx):
-    const Fftw3Lib* = "libfftw3(|.0).dylib"
-    when compileOption("threads"):
-      const Fftw3ThreadLib* = "libfftw3_threads(|.0).dylib"
+  const Fftw3Lib* = libPath / "libfftw3(|.0).dylib"
 else:
-    const Fftw3Lib* = "libfftw3.so(|.3)"
-    when compileOption("threads"):
-      const Fftw3ThreadLib* = "libfftw3_threads(|.3).so"
+  const Fftw3Lib* = libPath / "libfftw3.so(|.3)"
 
 type
-    fftw_r2r_kind* = enum
-        FFTW_R2HC = 0, FFTW_HC2R = 1, FFTW_DHT = 2, FFTW_REDFT00 = 3, FFTW_REDFT01 = 4, FFTW_REDFT10 = 5,
-                FFTW_REDFT11 = 6, FFTW_RODFT00 = 7, FFTW_RODFT01 = 8, FFTW_RODFT10 = 9, FFTW_RODFT11 = 10
+  fftw_r2r_kind* = enum
+    FFTW_R2HC = 0, FFTW_HC2R = 1, FFTW_DHT = 2, FFTW_REDFT00 = 3, FFTW_REDFT01 = 4, FFTW_REDFT10 = 5, FFTW_REDFT11 = 6, FFTW_RODFT00 = 7, FFTW_RODFT01 = 8, FFTW_RODFT10 = 9, FFTW_RODFT11 = 10
 
-    fftw_iodim* {.pure.} = object
-        n*: cint
-        `is`*: cint
-        os*: cint
+  fftw_iodim* {.pure.} = object
+    n*: cint
+    `is`*: cint
+    os*: cint
 
-    ptrdiff_t* = clong
-    wchar_t* = cint
-    fftw_iodim64* {.pure.} = object
-        n*: ptrdiff_t
-        `is`*: ptrdiff_t
-        os*: ptrdiff_t
+  ptrdiff_t* = clong
+  wchar_t* = cint
+  fftw_iodim64* {.pure.} = object
+    n*: ptrdiff_t
+    `is`*: ptrdiff_t
+    os*: ptrdiff_t
 
-    fftw_write_char_func* = proc (c: char, a3: pointer) {.cdecl.}
-    fftw_read_char_func* = proc (a2: pointer): cint {.cdecl.}
-    # Deprecated -> Use complex
-    fftw_complex = Complex64
-    fftw_plan* = pointer
+  fftw_write_char_func* = proc (c: char, a3: pointer) {.cdecl.}
+  fftw_read_char_func* = proc (a2: pointer): cint {.cdecl.}
+  # Deprecated -> Use complex
+  fftw_complex = Complex64
+  fftw_plan* = pointer
 
 
 proc fftw_fprint_plan*(p: fftw_plan, output_file: ptr FILE) {.cdecl, importc: "fftw_fprint_plan", dynlib: Fftw3Lib.}

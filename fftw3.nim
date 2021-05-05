@@ -303,13 +303,13 @@ proc fftw_cleanup*() {.cdecl, importc: "fftw_cleanup", dynlib: Fftw3Lib.}
   ## All existing plans become undefined, and you should not attempt to execute them nor to destroy them. You can however create and execute/destroy new plans, in which case FFTW starts accumulating wisdom information again.
 
 when compileOption("threads"):
-  proc fftw_init_threads*() {.cdecl, importc: "fftw_init_threads", dynlib: Fftw3ThreadLib.}
+  proc fftw_init_threads*() {.cdecl, importc: "fftw_init_threads", dynlib: Fftw3Lib.}
     ## Initialize once before using thread-ed plan
     ## Needs ``--threads:on`` to be enabled
-  proc fftw_plan_with_nthreads*(nthreads: cint) {.cdecl, importc: "fftw_plan_with_nthreads", dynlib: Fftw3ThreadLib.}
+  proc fftw_plan_with_nthreads*(nthreads: cint) {.cdecl, importc: "fftw_plan_with_nthreads", dynlib: Fftw3Lib.}
     ## Set the number of threads to use
     ## Needs ``--threads:on`` to be enabled
-  proc fftw_cleanup_threads*() {.cdecl, importc: "fftw_cleanup_threads", dynlib: Fftw3ThreadLib.}
+  proc fftw_cleanup_threads*() {.cdecl, importc: "fftw_cleanup_threads", dynlib: Fftw3Lib.}
     ## Additional clean-up when threads are used
     ## Needs ``--threads:on`` to be enabled
 

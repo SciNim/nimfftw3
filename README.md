@@ -9,12 +9,10 @@ Nim bindings to the FFTW3 library, to compute Fourier transforms of various kind
 
 ## Installation
 
-* Install FFTW3 library
-  * ex: `sudo apt-get install fftw3 fftw3-devel`
-  * ex: `sudo zypper install fftw3-devel`
-  * There are different FFTW3 libraries compiled with different options, the bindings should work with all of them. If it does not, open an issue and I'll look into it.
-* Install the bindings `nimble install fftw3` 
+Install the bindings `nimble install fftw3` 
+
 To generate the documentation locally use ``nimble doc --project src/fftw3.nim --out:docs/`` or ``nimble gendoc``
+If you use ``--threads:on`` make sure your version of FFTW3 **must be compiled with --enable-threads --with-combined-tjreads**.
 
 Note that FFTW3 is untested for Windows but a Windows version exists. 
 
