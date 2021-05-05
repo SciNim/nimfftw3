@@ -18,8 +18,6 @@ task gendoc, "gen doc":
   exec("nimble doc --threads:on --project src/fftw3.nim --out:docs/")
 
 task installFftw, "Build and install a local copy of FFTW":
-  if not dirExists "vendor":
-    mkDir "vendor"
   selfExec("r install/fftw_installer.nim")
 
 before install:
