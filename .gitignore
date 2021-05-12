@@ -1,3 +1,4 @@
 tests/bin/
 testresults/
 nimcache/
+install/

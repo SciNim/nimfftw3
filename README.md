@@ -13,7 +13,15 @@ Install the bindings `nimble install fftw3`
 
 To generate the documentation locally use ``nimble doc --project src/fftw3.nim --out:docs/`` or ``nimble gendoc``
 
-On Unix, nim-fftw3 compile FFTW using **./configure --enable-shared --enable-threads --with-combined-threads**.
+On Linux : 
+* http://www.fftw.org/fftw-3.3.9.tar.gz
+* **./configure --enable-shared --enable-threads --with-combined-threads**.
+* make
+* sudo make install
+
+On Windows : 
+* Download ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+* Uncompress in a location known PATH
 
 Note that FFTW3 is untested for Windows but a Windows version exists. 
 
