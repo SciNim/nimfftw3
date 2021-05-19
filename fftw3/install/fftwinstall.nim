@@ -32,9 +32,9 @@ proc downloadBuildFftw*(delete: bool) =
 
   if not fileExists(target / filename):
     downloadUrl(url, target, filename)
-    uncompress(target, filename, delete)
 
   if not dirExists(target / "lib"):
+    uncompress(target, filename, delete)
     buildFftw(target, filename)
 
 when isMainModule:
