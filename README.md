@@ -50,7 +50,9 @@ API Documentations with some examples : https://scinim.github.io/nimfftw3/
 
 FFTW3 official documentation : http://www.fftw.org/fftw3_doc/
 
-To generate the bindings documentation use ``nimble doc --project src/fftw3.nim --out:docs/`` or ``nimble gendoc``
+To generate the bindings documentation use :
+* ``nimble develop``
+* ``nimble gendoc``
 
 ### Example
 
