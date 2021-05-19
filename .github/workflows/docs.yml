@@ -13,7 +13,6 @@ jobs:
       - name: "install_nim"
         id: install_nim
         uses: iffy/install-nim@v3
-      - run: nimble develop -y
       - name: Set CI config github
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -22,6 +21,8 @@ jobs:
         run: git fetch
       - name: Rebase
         run: git rebase -Xours origin/master
+      - name: NimbleDevelop
+        run: nimble develop -y
       - name: Gendoc
         run: nimble gendoc
       - name: Commit files
