@@ -12,7 +12,7 @@ else:
 
 const Fftw3Lib* {.strdefine.} = Fftw3LibPath / Fftw3LibName
 static:
-  echo "######", Fftw3Lib
+  debugEcho "nim-fftw3> Using dynamic library: ", Fftw3Lib
 
 proc getFftw3Lib*() : string {.compiletime.}=
   return Fftw3Lib
