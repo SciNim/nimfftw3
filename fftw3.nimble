@@ -17,7 +17,7 @@ task gendoc, "gen doc":
   exec("nimble doc --threads:on --project fftw3.nim --out:docs/")
 
 task installfftw, "Install FFTW-3.3.9":
-  selfExec("r -d:release fftw3/install/fftwinstall.nim")
+  selfExec("r fftw3/install/fftwinstall.nim")
 
 after install:
   installfftwTask()
@@ -26,5 +26,4 @@ after develop:
   installfftwTask()
 
 before uninstall:
-  echo "???????????"
   rmDir("third_party")
