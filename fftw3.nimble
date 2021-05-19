@@ -3,8 +3,7 @@ version       = "0.5.0"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
-installDirs   = @["third_party"]
-
+installDirs   = @["third_party/lib"]
 
 # Dependencies
 
@@ -25,3 +24,4 @@ before install:
 
 before develop:
   installfftwTask()
+

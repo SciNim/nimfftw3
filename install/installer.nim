@@ -33,7 +33,7 @@ proc uncompress*(targetDir, filename: string, delete = true) =
   else:
     echo "Error : Unknown archive format. Should .zip or .tar.gz"
   copyDirWithPermissions(tmp, targetDir)
+  removeDir(tmp)
   if delete:
-    removeDir(tmp)
     removeFile(targetDir / filename)
 

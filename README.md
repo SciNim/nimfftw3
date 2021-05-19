@@ -7,28 +7,40 @@
 
 Nim bindings to the FFTW3 library, to compute Fourier transforms of various kinds with high performance.
 
-Install the bindings `nimble install fftw3` 
 
 ## Installing FFTW
 
-First, try ``nimble fftwinstall`` and see if that works for you.
+### On Linux
 
-If it doesn't you can reproduce manually the installations steps : 
+Installing the bindings `nimble install fftw3` should take care of everything.
 
-On Linux : 
+If you want to use a custom FFTW3 versions you can either : 
+
+* Overload the library name used with ``importc, dynlib:Fftw3Lib`` pragmas by adding ``-d:Fftw3Lib="libfftw3l.so"`` flags
+OR
+
+* Use ![--dynlibOverride](https://nim-lang.org/docs/nimc.html#dynliboverride) mechanism
+
+The bindings expects a FFTW3 shared library compiled with **at least** the followings flags : 
+``./configure --enable-shared --enable-threads --with-combined-threads``
+
+You can also install Fftw3 manually : 
+
 * http://www.fftw.org/fftw-3.3.9.tar.gz
 * **./configure --enable-shared --enable-threads --with-combined-threads**.
 * make
-* sudo make install
+* sudo make install -> this should install libfftw3.so in a path know to your system (usually ``/usr/local/lib64``)
 
-On Windows : 
+### On Windows 
+
+Install the bindings `nimble install fftw3` 
+The library ``libfftw3.dll`` should be in ``nimbleDir`` / ``"lib"``.
+
+Otherwise : 
 * Download ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
 * Uncompress in a location known PATH
 
 Note that FFTW3 is untested for Windows. 
-
-
-
 
 ## Usage
 

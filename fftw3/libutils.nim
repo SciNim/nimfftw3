@@ -2,12 +2,18 @@ import complex
 import os
 
 ## Some utility types and functions not directly used to calculate FFT
+const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"
 when defined(windows):
-  const Fftw3Lib* = "libfftw3-3.dll"
+  const Fftw3LibName = "libfftw3-3.dll"
 elif defined(macosx):
-  const Fftw3Lib* = "libfftw3(|.0).dylib"
+  const Fftw3LibName* = "libfftw3(|.0).dylib"
 else:
-  const Fftw3Lib* = "libfftw3.so(|.3)"
+  const Fftw3LibName* = "libfftw3.so.(|3|3.6.9)"
+
+const Fftw3Lib* {.strdefine.} = Fftw3LibPath / Fftw3LibName
+
+proc getFftw3Lib*() : string {.compiletime.}=
+  return Fftw3Lib
 
 type
   fftw_r2r_kind* = enum
