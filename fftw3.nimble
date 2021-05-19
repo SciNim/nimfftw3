@@ -11,6 +11,7 @@ installDirs   = @["third_party"]
 requires "nim >= 1.2.0"
 requires "arraymancer >= 0.6.3"
 requires "weave >= 0.4.9"
+requires "zippy"
 
 import os
 task gendoc, "gen doc":
