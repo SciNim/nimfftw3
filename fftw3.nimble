@@ -3,6 +3,7 @@ version       = "0.5.0"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
+installDirs   = @["third_party"]
 
 # Dependencies
 
@@ -24,3 +25,6 @@ after install:
 after develop:
   installfftwTask()
 
+before uninstall:
+  echo "???????????"
+  rmDir("third_party")

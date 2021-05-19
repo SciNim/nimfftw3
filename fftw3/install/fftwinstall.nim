@@ -28,7 +28,7 @@ proc buildFftw(targetDir, filename: string) =
 
 proc downloadBuildFftw*(delete: bool) =
   let (url, filename) = getUrlAndFilename()
-  let target = getProjectDir().parentDir() / "third_party"
+  let target = getProjectDir().parentDir().parentDir() / "third_party"
   if not fileExists(target / filename):
     downloadUrl(url, target, filename)
     uncompress(target, filename, delete)
@@ -37,7 +37,4 @@ proc downloadBuildFftw*(delete: bool) =
     buildFftw(target, filename)
 
 when isMainModule:
-  when defined(keepFftwArchive):
-    downloadBuildFftw(false)
-  else:
-    downloadBuildFftw(true)
+  downloadBuildFftw(false)
