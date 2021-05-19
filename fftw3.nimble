@@ -1,32 +1,32 @@
 # Package
-
-version       = "0.4.7"
+version       = "0.5.0"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
-srcDir        = "src"
-
+installDirs   = @["third_party"]
 
 # Dependencies
 
 requires "nim >= 1.2.0"
 requires "arraymancer >= 0.6.3"
 requires "weave >= 0.4.9"
+requires "zippy"
 
+import os
 task gendoc, "gen doc":
-  exec("nimble doc --threads:on --project src/fftw3.nim --out:docs/")
+  exec("nimble doc --threads:on --project fftw3.nim --out:docs/")
 
-import distros
-task externalDep, "package":
-  when defined(nimdistros):
-    if detectOs(Ubuntu) or detectOs(Debian) or detectOs(OpenSUSE):
-      foreignDep "fftw3-dev"
-      foreignDep "fftw3-threads-dev"
-    echo "Install libfftw3 using a package manager : "
-    echoForeignDeps()
+task installfftw, "Install FFTW-3.3.9":
+  selfExec("r fftw3/install/fftwinstall.nim")
+
+task localinstallfftw, "Install FFTW-3.3.9":
+  selfExec("r -d:keepFftwArchive fftw3/install/fftwinstall.nim")
 
 after install:
-  externalDepTask()
+  installfftwTask()
 
 after develop:
-  externalDepTask()
+  localinstallfftwTask()
+
+before uninstall:
+  rmDir("third_party")

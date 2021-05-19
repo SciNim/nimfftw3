@@ -7,16 +7,40 @@
 
 Nim bindings to the FFTW3 library, to compute Fourier transforms of various kinds with high performance.
 
-## Installation
 
-* Install FFTW3 library
-  * ex: `sudo apt-get install fftw3 fftw3-devel`
-  * ex: `sudo zypper install fftw3-devel`
-  * There are different FFTW3 libraries compiled with different options, the bindings should work with all of them. If it does not, open an issue and I'll look into it.
-* Install the bindings `nimble install fftw3` 
-To generate the documentation locally use ``nimble doc --project src/fftw3.nim --out:docs/`` or ``nimble gendoc``
+## Installing FFTW
 
-Note that FFTW3 is untested for Windows but a Windows version exists. 
+### On Linux
+
+Installing the bindings `nimble install fftw3` should take care of everything.
+
+If you want to use a custom FFTW3 versions you can either : 
+
+* Overload the library name used with ``importc, dynlib:Fftw3Lib`` pragmas by adding ``-d:Fftw3Lib="libfftw3l.so"`` flags
+OR
+
+* Use ![--dynlibOverride](https://nim-lang.org/docs/nimc.html#dynliboverride) mechanism
+
+The bindings expects a FFTW3 shared library compiled with **at least** the followings flags : 
+``./configure --enable-shared --enable-threads --with-combined-threads``
+
+You can also install Fftw3 manually : 
+
+* http://www.fftw.org/fftw-3.3.9.tar.gz
+* **./configure --enable-shared --enable-threads --with-combined-threads**.
+* make
+* sudo make install -> this should install libfftw3.so in a path know to your system (usually ``/usr/local/lib64``)
+
+### On Windows 
+
+Install the bindings `nimble install fftw3` 
+The library ``libfftw3.dll`` should be in ``nimbleDir`` / ``"lib"``.
+
+Otherwise : 
+* Download ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+* Uncompress in a location known PATH
+
+Note that FFTW3 is untested for Windows. 
 
 ## Usage
 
@@ -25,6 +49,10 @@ Note that FFTW3 is untested for Windows but a Windows version exists.
 API Documentations with some examples : https://scinim.github.io/nimfftw3/
 
 FFTW3 official documentation : http://www.fftw.org/fftw3_doc/
+
+To generate the bindings documentation use :
+* ``nimble develop``
+* ``nimble gendoc``
 
 ### Example
 
