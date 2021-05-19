@@ -11,6 +11,8 @@ else:
   const Fftw3LibName* = "libfftw3.so.(|3|3.6.9)"
 
 const Fftw3Lib* {.strdefine.} = Fftw3LibPath / Fftw3LibName
+static:
+  echo "######", Fftw3Lib
 
 proc getFftw3Lib*() : string {.compiletime.}=
   return Fftw3Lib
