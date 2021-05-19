@@ -2,7 +2,7 @@ import complex
 import os
 
 ## Some utility types and functions not directly used to calculate FFT
-const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"
+const Fftw3LibPath = currentSourcePath().parentDir() / "third_party" / "lib"
 when defined(windows):
   const Fftw3LibName = "libfftw3-3.dll"
 elif defined(macosx):

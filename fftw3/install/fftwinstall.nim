@@ -18,22 +18,26 @@ proc buildFftw(targetDir, filename: string) =
     # Remove .tar.gz
     let (_, f, _) = filename.splitFile()
     let (_, filename, _) = f.splitFile()
-    if not dirExists(targetDir / filename):
+    if not dirExists(targetDir / "lib"):
       setFilePermissions(targetDir / filename / "configure", {fpUserExec, fpUserWrite, fpUserRead, fpGroupRead, fpOthersRead})
       discard execShellCmd("cd " & targetDir / filename & "; ./configure --enable-shared --enable-threads --with-combined-threads")
       discard execShellCmd("make -C " & targetDir / filename)
-    copyDirWithPermissions(targetDir / filename / ".libs", targetDir / "lib")
+      copyDirWithPermissions(targetDir / filename / ".libs", targetDir / "lib")
   else:
-    copyDirWithPermissions(targetDir / filename / ".libs", targetDir / "lib")
+    copyDirWithPermissions(targetDir / filename, targetDir / "lib")
 
-proc downloadBuildFftw*() =
+proc downloadBuildFftw*(delete: bool) =
   let (url, filename) = getUrlAndFilename()
   let target = getProjectDir().parentDir() / "third_party"
   if not fileExists(target / filename):
     downloadUrl(url, target, filename)
-    uncompress(target, filename, false)
+    uncompress(target, filename, delete)
+
   if not dirExists(target / "lib"):
     buildFftw(target, filename)
 
 when isMainModule:
-  downloadBuildFftw()
+  when defined(keepFftwArchive):
+    downloadBuildFftw(false)
+  else:
+    downloadBuildFftw(true)
