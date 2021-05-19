@@ -19,11 +19,14 @@ task gendoc, "gen doc":
 task installfftw, "Install FFTW-3.3.9":
   selfExec("r fftw3/install/fftwinstall.nim")
 
+task localinstallfftw, "Install FFTW-3.3.9":
+  selfExec("r -d:keepFftwArchive fftw3/install/fftwinstall.nim")
+
 after install:
   installfftwTask()
 
 after develop:
-  installfftwTask()
+  localinstallfftwTask()
 
 before uninstall:
   rmDir("third_party")

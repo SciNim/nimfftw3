@@ -6,20 +6,20 @@ import
 proc getProjectDir*(): string {.compileTime.} =
   currentSourcePath.rsplit(DirSep, 1)[0]
 
-proc onProgressChanged*(total, progress, speed: BiggestInt) {.async.} =
+proc onProgressChanged*(total, progress, speed: BiggestInt) =
   echo &"Downloaded {progress} of {total}"
   echo &"Current rate: {speed.float64 / (1000*1000):4.3f} MiBi/s" # TODO the unit is neither MB or Mb or MiBi ???
 
-proc downloadTo*(url, targetDir, filename: string) {.async.} =
-  var client = newAsyncHttpClient()
+proc downloadTo*(url, targetDir, filename: string) =
+  var client = newHttpClient()
   defer: client.close()
   client.onProgressChanged = onProgressChanged
   echo "Starting download of \"", url, '\"'
   echo "Storing temporary into: \"", targetDir, '\"'
-  await client.downloadFile(url, targetDir / filename)
+  client.downloadFile(url, targetDir / filename)
 
 proc downloadUrl*(url, targetDir, filename: string) =
-  waitFor url.downloadTo(targetDir, filename)
+  url.downloadTo(targetDir, filename)
 
 proc uncompress*(targetDir, filename: string, delete = true) =
   let tmp = targetDir / "tmp"
