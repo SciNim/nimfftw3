@@ -2,7 +2,8 @@ import complex
 import os
 
 ## Some utility types and functions not directly used to calculate FFT
-const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"
+# const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"
+
 when defined(windows):
   const Fftw3LibName = "libfftw3-3.dll"
 elif defined(macosx):
@@ -10,9 +11,9 @@ elif defined(macosx):
 else:
   const Fftw3LibName* = "libfftw3.so.(|3|3.6.9)"
 
-const Fftw3Lib* {.strdefine.} = Fftw3LibPath / Fftw3LibName
-static:
-  debugEcho "nim-fftw3> Using dynamic library: ", Fftw3Lib
+const Fftw3Lib* = Fftw3LibName
+# static:
+#   debugEcho "nim-fftw3> Using dynamic library: ", Fftw3Lib
 
 proc getFftw3Lib*() : string {.compiletime.}=
   return Fftw3Lib

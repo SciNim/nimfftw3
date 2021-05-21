@@ -23,6 +23,8 @@ jobs:
         run: git rebase -Xours origin/master
       - name: NimbleDevelop
         run: nimble develop -y
+      - name: LocalFFTW3Install
+        run: nimble localinstallfftw
       - name: Gendoc
         run: nimble gendoc
       - name: Commit files

@@ -15,5 +15,7 @@ jobs:
         id: install_nim
         uses: iffy/install-nim@v3
       - run: nimble develop -y
+      - name: LocalFFTW3Install
+        run: nimble localinstallfftw
       - run: testament r tests/testall.nim
       - run: nimble gendoc

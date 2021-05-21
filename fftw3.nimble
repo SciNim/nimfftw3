@@ -22,11 +22,8 @@ task installfftw, "Install FFTW-3.3.9":
 task localinstallfftw, "Install FFTW-3.3.9":
   selfExec("r -d:keepFftwArchive fftw3/install/fftwinstall.nim")
 
-after install:
-  installfftwTask()
-
-after develop:
-  localinstallfftwTask()
-
-before uninstall:
-  rmDir("third_party")
+# after install:
+#   installfftwTask()
+#
+# after develop:
+#   localinstallfftwTask()

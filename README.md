@@ -12,33 +12,29 @@ Nim bindings to the FFTW3 library, to compute Fourier transforms of various kind
 
 ### On Linux
 
-Installing the bindings `nimble install fftw3` should take care of everything.
+Installing the bindings with `nimble install fftw3`.
 
-If you want to use a custom FFTW3 versions you can either : 
+FFTW3 in package manager often do not have the correct flags so yo probably should manually install it:
+* http://www.fftw.org/fftw-3.3.9.tar.gz
+* **./configure --enable-shared --enable-threads --with-combined-threads**.
+* make
+* sudo make install 
+  * this should install libfftw3.so in a path know to your system (usually ``/usr/local/lib64``).
+* Check that the FFTW3 libraries files are present in your ``$LD_LIBRARY_PATH`` 
 
-* Overload the library name used with ``importc, dynlib:Fftw3Lib`` pragmas by adding ``-d:Fftw3Lib="libfftw3l.so"`` flags
-OR
-
-* Use ![--dynlibOverride](https://nim-lang.org/docs/nimc.html#dynliboverride) mechanism
+If you want a different versions of FFTW3 (like float our long double), 
+* Overload the library name used with ``importc, dynlib:Fftw3Lib`` pragmas by using ![--dynlibOverride](https://nim-lang.org/docs/nimc.html#dynliboverride) mechanism
+OR 
+* Make a symlink that nimfftw3 will look for and modify your ``$LD_LIBRARY_PATH`` to ensure it is used.
 
 The bindings expects a FFTW3 shared library compiled with **at least** the followings flags : 
 ``./configure --enable-shared --enable-threads --with-combined-threads``
 
-You can also install Fftw3 manually : 
-
-* http://www.fftw.org/fftw-3.3.9.tar.gz
-* **./configure --enable-shared --enable-threads --with-combined-threads**.
-* make
-* sudo make install -> this should install libfftw3.so in a path know to your system (usually ``/usr/local/lib64``)
-
 ### On Windows 
 
 Install the bindings `nimble install fftw3` 
-The library ``libfftw3.dll`` should be in ``nimbleDir`` / ``"lib"``.
-
-Otherwise : 
 * Download ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
-* Uncompress in a location known PATH
+* Uncompress in a location known to Windows 
 
 Note that FFTW3 is untested for Windows. 
 
