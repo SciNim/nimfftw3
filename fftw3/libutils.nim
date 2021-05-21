@@ -9,8 +9,11 @@ elif defined(macosx):
 else:
   const Fftw3LibName* = "libfftw3.so.(|3|3.6.9)"
 
-# const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"
-const Fftw3Lib* = Fftw3LibName
+when defined(localFftw3):
+  const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"
+  const Fftw3Lib* = Fftw3LibPath / Fftw3LibName
+else:
+  const Fftw3Lib* = Fftw3LibName
 # static:
 #   debugEcho "nim-fftw3> Using dynamic library: ", Fftw3Lib
 
