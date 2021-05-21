@@ -17,8 +17,11 @@ jobs:
       - run: nimble develop -y
       - name: LocalFFTW3Install
         run: nimble localinstallfftw
-        env: LD_LIBRARY_PATH: third_parth/lib
+        env:
+          LD_LIBRARY_PATH: third_parth/lib
       - run: testament r tests/testall.nim
-        env: LD_LIBRARY_PATH: third_parth/lib
+        env:
+          LD_LIBRARY_PATH: third_parth/lib
       - run: nimble gendoc
-        env: LD_LIBRARY_PATH: third_parth/lib
+        env:
+          LD_LIBRARY_PATH: third_parth/lib
