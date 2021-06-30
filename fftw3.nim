@@ -14,29 +14,40 @@
 ### Examples
 
 ####  C-Binding low-level example
-
-##  .. code-block:: nim
-##    const N = 3
-##    var input: array[1..N, cdouble] = [0.0, 2.0, 6.0]
-##    var output: array[1..N, cdouble]
-##    let bufIn = cast[ptr UncheckedArray[cdouble]](add(input[0]))
-##    let bufOut = cast[ptr UncheckedArray[cdouble]](add(output[0]))
-##    let plan = fftw_plan_r2r_1d(N, bufIn, FFTW_REDFT00, FFTW_ESTIMATE)
-##    fftw_execute(plan)
-##    let expectedResult: array[1..N, cdouble] = [10.0, -6.0, 2.0]
-##    for i in low(output)..high(output):
-##      assert abs(output[i] - expectedResult[i]) < 1.0e-14
+runnableExamples:
+  import fftw3
+  const N = 3
+  var input: array[N, cdouble] = [0.0, 2.0, 6.0]
+  var output: array[N, cdouble]
+  let bufIn = cast[ptr UncheckedArray[cdouble]](addr(input[0]))
+  let bufOut = cast[ptr UncheckedArray[cdouble]](addr(output[0]))
+  let plan = fftw_plan_r2r_1d(N, bufIn, bufOut, fftw_r2r_kind.FFTW_REDFT00, FFTW_ESTIMATE)
+  fftw_execute(plan)
+  let expectedResult: array[N, cdouble] = [10.0, -6.0, 2.0]
+  for i in low(output)..high(output):
+    assert abs(output[i] - expectedResult[i]) < 1.0e-14
 
 ####  Arraymancer API example
+runnableExamples:
+  import arraymancer
+  import fftw3
+  import sequtils
 
-## .. code-block:: nim
-##   var input  : Tensor[Complex64] = # Insert data in your input Tensor...
-##   # Allocate output Tensor
-##   var output = newTensor[Complex64](input.shape.toSeq)
-##   # Create a plan
-##   var plan : fftw_plan = fftw_plan_dft(input, output, FFTW_FORWARD, FFTW_ESTIMATE)
-##   # Execute plan in-place
-##   fftw_execute(plan)
+  var
+    input  : Tensor[Complex64] = newTensor[Complex64](@[10, 10, 10])
+    reInput = randomTensor[float64](10, 10, 100.0)
+    imInput = randomTensor[float64](10, 10, 100.0)
+
+  for i, x in input.menumerate:
+    x.re = reInput.atContiguousIndex(i)
+    x.im = imInput.atContiguousIndex(i)
+
+  # Allocate output Tensor
+  var output = newTensor[Complex64](input.shape.toSeq)
+  # Create a plan
+  var plan : fftw_plan = fftw_plan_dft(input, output, FFTW_FORWARD, FFTW_ESTIMATE)
+  # Execute plan in-place
+  fftw_execute(plan)
 
 ### Planner flags
 
