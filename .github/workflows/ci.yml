@@ -19,7 +19,7 @@ jobs:
         run: nimble localinstallfftw
         env:
           LD_LIBRARY_PATH: ${PWD}/third_party/lib
-      - run: testament r tests/testall.nim -d:localFftw3
+      - run: nimble test -d:localFftw3
         env:
           LD_LIBRARY_PATH: ${PWD}/third_party/lib
       - run: nimble gendoc

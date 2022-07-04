@@ -1,5 +1,5 @@
 # Package
-version       = "0.5.1"
+version       = "0.5.2"
 author        = "rcaillaud"
 description   = "Nim FFTW bindings"
 license       = "LGPL-2.1"
@@ -9,8 +9,8 @@ installDirs   = @["third_party"]
 
 requires "nim >= 1.2.0"
 requires "arraymancer >= 0.6.3"
-requires "weave >= 0.4.9"
 requires "zippy"
+# requires "weave >= 0.4.9"
 
 import os
 task gendoc, "gen doc":
@@ -22,8 +22,3 @@ task installfftw, "Install FFTW-3.3.9":
 task localinstallfftw, "Install FFTW-3.3.9":
   selfExec("r -d:keepFftwArchive fftw3/install/fftwinstall.nim")
 
-# after install:
-#   installfftwTask()
-
-# after develop:
-#   localinstallfftwTask()
