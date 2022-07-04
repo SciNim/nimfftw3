@@ -15,3 +15,10 @@ requires "zippy"
 import os
 task gendoc, "gen doc":
   exec("nimble doc --threads:on --project fftw3.nim -d:localFftw3 --out:docs/")
+
+task installfftw, "Install FFTW-3.3.9":
+  selfExec("r fftw3/install/fftwinstall.nim")
+
+task localinstallfftw, "Install FFTW-3.3.9":
+  selfExec("r -d:keepFftwArchive fftw3/install/fftwinstall.nim")
+
