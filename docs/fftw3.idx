@@ -1,8 +1,3 @@
-Introduction	fftw3.html#introduction	 Introduction	
-Examples	fftw3.html#examples	 Examples	
-C-Binding low-level example	fftw3.html#examples-cminusbinding-lowminuslevel-example	  C-Binding low-level example	
-Arraymancer API example	fftw3.html#examples-arraymancer-api-example	  Arraymancer API example	
-Planner flags	fftw3.html#planner-flags	 Planner flags	
 FFTW_MEASURE	fftw3.html#FFTW_MEASURE	fftw3: FFTW_MEASURE	
 FFTW_ESTIMATE	fftw3.html#FFTW_ESTIMATE	fftw3: FFTW_ESTIMATE	
 FFTW_PATIENT	fftw3.html#FFTW_PATIENT	fftw3: FFTW_PATIENT	
@@ -52,3 +47,8 @@ fftw_cleanup	fftw3.html#fftw_cleanup	fftw3: fftw_cleanup()
 fftw_init_threads	fftw3.html#fftw_init_threads	fftw3: fftw_init_threads()	
 fftw_plan_with_nthreads	fftw3.html#fftw_plan_with_nthreads,cint	fftw3: fftw_plan_with_nthreads(nthreads: cint)	
 fftw_cleanup_threads	fftw3.html#fftw_cleanup_threads	fftw3: fftw_cleanup_threads()	
+Introduction	fftw3.html#introduction	 Introduction	
+Examples	fftw3.html#examples	 Examples	
+C-Binding low-level example	fftw3.html#examples-cminusbinding-lowminuslevel-example	  C-Binding low-level example	
+Arraymancer API example	fftw3.html#examples-arraymancer-api-example	  Arraymancer API example	
+Planner flags	fftw3.html#planner-flags	 Planner flags	
