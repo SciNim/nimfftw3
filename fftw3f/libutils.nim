@@ -66,9 +66,9 @@ proc fftwf_cost*(p: fftwf_plan): cdouble {.cdecl, importc: "fftwf_cost", dynlib:
 
 proc fftwf_alignment_of*(p: ptr cdouble): cint {.cdecl, importc: "fftwf_alignment_of", dynlib: Fftw3Lib.}
 
-let fftwf_version* {.importc: "fftwf__version", dynlib: Fftw3Lib.}: cstring
+let fftwf_version* {.importc: "fftwf_version", dynlib: Fftw3Lib.}: cstring
 
-var fftwf_cc* {.importc: "fftwf__cc", dynlib: Fftw3Lib.}: cstring
+var fftwf_cc* {.importc: "fftwf_cc", dynlib: Fftw3Lib.}: cstring
 
-var fftwf_codelet_optim* {.importc: "fftwf__codelet_optim", dynlib: Fftw3Lib.}: cstring
+var fftwf_codelet_optim* {.importc: "fftwf_codelet_optim", dynlib: Fftw3Lib.}: cstring
 
