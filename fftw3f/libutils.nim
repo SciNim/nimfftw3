@@ -7,7 +7,7 @@ when defined(windows):
 elif defined(macosx):
   const Fftw3LibName* = "libfftw3f(|.0).dylib"
 else:
-  const Fftw3LibName* = "libfftw3f.so.(|3|3.6.9)"
+  const Fftw3LibName* = "libfftw3f(|_threads.so).(|3|3.6.9)"
 
 when defined(localFftw3):
   const Fftw3LibPath = currentSourcePath().parentDir().parentDir() / "third_party" / "lib"

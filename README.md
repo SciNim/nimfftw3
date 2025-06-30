@@ -12,31 +12,72 @@ Nim bindings to the FFTW3 library, to compute Fourier transforms of various kind
 
 ### On Linux
 
-Installing the bindings with `nimble install fftw3`.
+FFTW3 is available on most Linux distributions.
 
-FFTW3 in package manager often do not have the correct flags so yo probably should manually install it:
-* http://www.fftw.org/fftw-3.3.9.tar.gz
-* **./configure --enable-shared --enable-threads --with-combined-threads**.
-* make
-* sudo make install 
-  * this should install libfftw3.so in a path know to your system (usually ``/usr/local/lib64``).
-* Check that the FFTW3 libraries files are present in your ``$LD_LIBRARY_PATH`` 
+```
+# install dependencies
 
-If you want a different versions of FFTW3 (like float our long double), 
-* Overload the library name used with ``importc, dynlib:Fftw3Lib`` pragmas by using ![--dynlibOverride](https://nim-lang.org/docs/nimc.html#dynliboverride) mechanism
-OR 
-* Make a symlink that nimfftw3 will look for and modify your ``$LD_LIBRARY_PATH`` to ensure it is used.
+$ sudo apt install fftw3      # debian/ubuntu
+$ sudo pacman -S fftw3        # arch
+$ sudo yum install fftw3-libs # fedora
 
-The bindings expects a FFTW3 shared library compiled with **at least** the followings flags : 
-``./configure --enable-shared --enable-threads --with-combined-threads``
+# install nimfftw3
+
+nimble install fftw3
+
+```
+
+Note: Arch and Debian place their threaded fftw into `libfftw3_thread.so`, Fedora in `libfftw3.so`. Both work fine.
+
+### On OSX
+
+Use the homebrew package system and nimble.
+
+```
+# install dependency
+brew install fftw
+
+# install nim package
+$ nimble install fftw3
+
+```
+
+Note: Less tested than linux
 
 ### On Windows 
 
-Install the bindings `nimble install fftw3` 
-* Download ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
-* Uncompress in a location known to Windows 
+Install the binary dependency manually
 
-Note that FFTW3 is untested for Windows. 
+* Download ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+* Uncompress in a location known to Windows, e.g. the same directory as your Nim binary program
+
+```
+REM install the package
+nimble install fftw3
+```
+
+Note: Less tested than linux
+
+
+```nimble install fftw3```
+
+## From source
+
+You can build FFTW from source with more control over parameters on linux, osx via xcode command line tools, and windows via mingw.
+
+```
+$ wget http://www.fftw.org/fftw-3.3.9.tar.gz
+$ tar -xvzf fftw-3.3.9.tar.gz
+
+# required flags for use with nimfftw3
+./configure --enable-shared --enable-threads --with-combined-threads
+make
+sudo make install 
+
+# nimble package
+nimble install fftw3
+
+```
 
 ## Usage
 
@@ -52,7 +93,7 @@ To generate the bindings documentation use :
 
 ### Example
 
-See ``tests/testall.nim`` for example of FFT using Seq and Tensor.
+See `tests/testall.nim` for example of FFT using Seq and Tensor, or `tests/testfloat.nim` for the `float32` version.
 
 ### FFTW3 facts that will surprise you 
 
@@ -72,6 +113,8 @@ Any help and contribution is welcome !
 
 As much as possible, breaking change in API should be avoided.
 Improving documentation and providing better high-level API are the focus for now.
+
+nimfftw3 supports float64 and float32. Other formats are possible but would require a patch.
 
 ## History
 
